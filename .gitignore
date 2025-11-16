@@ -1,0 +1,40 @@
+# --- Archivos y carpetas de Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.db
+*.sqlite3
+.env
+.venv/
+venv/
+
+# --- Configuración del entorno virtual ---
+# Si usas un entorno virtual local
+env/
+ENV/
+Scripts/
+
+# --- Archivos del sistema ---
+.DS_Store
+Thumbs.db
+
+# --- Configuración de IDEs ---
+.vscode/
+.idea/
+
+# --- Archivos de prueba o temporales ---
+*.bak
+*.tmp
+*.swp
+
+# --- Archivos compilados o empaquetados ---
+build/
+dist/
+*.spec
+
+# --- Configuración de MySQL o backups ---
+*.sql
+*.dump
+
