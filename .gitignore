@@ -35,6 +35,5 @@ dist/
 *.spec
 
 # --- Configuración de MySQL o backups ---
-*.sql
 *.dump
 

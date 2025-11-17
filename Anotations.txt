@@ -1,3 +1,8 @@
+Ángel Soto Pérez - S6A - 23270050 - Mis anotaciones se comparte para que mi equipo pueda saber los pasos opcionales 
+en caso dado de que no lo recuerden
+
+---------------------- Conectar con GITHUB y realizar cambios -----------------------------------------
+
 # entornovirtual\Scripts\activate (Entornovirtual dentro de UniformesBambiPOS)
 
 C:\UniformesBambiPOS>git remote add origin https://github.com/DeanC34/UniformesBambiPOS.git
@@ -5,7 +10,9 @@ C:\UniformesBambiPOS>git remote add origin https://github.com/DeanC34/UniformesB
 C:\UniformesBambiPOS>git branch -m main
 
 Recordar iniciar sesion en el git con tu github
-
+ 
+----------- Importar base de datos desde el script ------- 
+ 
 Enter password: *******
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 15
@@ -148,3 +155,32 @@ mysql> describe cliente
 5 rows in set (0.00 sec)
 
 mysql>
+
+----------------------------- Pasos para actualizar cambios -----------------------------------------------
+
+Microsoft Windows [Versión 10.0.26100.7171]
+(c) Microsoft Corporation. Todos los derechos reservados.
+
+C:\UniformesBambiPOS>git init
+Reinitialized existing Git repository in C:/UniformesBambiPOS/.git/
+
+C:\UniformesBambiPOS>git add .
+
+C:\UniformesBambiPOS>git commit -m "Actualizacion de estructura - Script SQL"
+[main a4ce37c] Actualizacion de estructura - Script SQL
+ 2 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 docs/diagrams/UniformesBambiModel.mwb
+
+C:\UniformesBambiPOS>git push -u origin main
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (6/6), 19.54 KiB | 19.54 MiB/s, done.
+Total 6 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/DeanC34/UniformesBambiPOS.git
+   b5cdd0b..a4ce37c  main -> main
+branch 'main' set up to track 'origin/main'.
+
+C:\UniformesBambiPOS>
+
