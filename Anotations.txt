@@ -184,3 +184,79 @@ branch 'main' set up to track 'origin/main'.
 
 C:\UniformesBambiPOS>
 
+----------------------------------- En caso de que Visual Studio Code no les detecte las librerias en entornovirtual ------------------------------------------
+
+PS C:\WINDOWS\System32> cd ..
+PS C:\WINDOWS> cd ..
+PS C:\> dire
+dire : El término 'dire' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable.
+Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e
+inténtelo de nuevo.
+En línea: 1 Carácter: 1
++ dire
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (dire:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\> dir
+
+
+    Directorio: C:\
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----     09/11/2025  11:58 a. m.                inetpub
+d-----     01/04/2024  01:26 a. m.                PerfLogs
+d-r---     16/11/2025  12:23 a. m.                Program Files
+d-r---     16/11/2025  12:21 a. m.                Program Files (x86)
+d-----     08/10/2025  07:24 p. m.                TC
+d-----     08/10/2025  07:23 p. m.                temporal
+d-----     17/11/2025  02:39 p. m.                UniformesBambiPOS
+d-r---     09/11/2025  12:03 p. m.                Users
+d-----     14/11/2025  12:03 p. m.                Windows
+d-----     09/11/2025  04:02 p. m.                Windows.old
+d-----     28/10/2025  08:46 p. m.                XboxGames
+-a----     26/10/2025  12:37 p. m.          12288 DumpStack.log
+
+
+PS C:\> cd UniformesBambiPOS
+PS C:\UniformesBambiPOS> ls
+
+
+    Directorio: C:\UniformesBambiPOS
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----     16/11/2025  04:14 p. m.                docs
+d-----     12/11/2025  09:37 p. m.                entornovirtual
+d-----     17/11/2025  03:04 p. m.                src
+-a----     16/11/2025  06:07 p. m.            528 .gitignore
+-a----     16/11/2025  06:03 p. m.           5518 Anotations.txt
+-a----     15/11/2025  11:12 p. m.            103 requirements.txt
+
+
+PS C:\UniformesBambiPOS> .\entornovirtual\Scripts\Activate.ps1
+.\entornovirtual\Scripts\Activate.ps1 : No se puede cargar el archivo
+C:\UniformesBambiPOS\entornovirtual\Scripts\Activate.ps1 porque la ejecución de scripts está deshabilitada en este
+sistema. Para obtener más información, consulta el tema about_Execution_Policies en
+https:/go.microsoft.com/fwlink/?LinkID=135170.
+En línea: 1 Carácter: 1
++ .\entornovirtual\Scripts\Activate.ps1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+PS C:\UniformesBambiPOS> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+PS C:\UniformesBambiPOS> .\entornovirtual\Scripts\Activate.ps1
+(entornovirtual) PS C:\UniformesBambiPOS> pip list
+Package                Version
+---------------------- -------
+customtkinter          5.2.2
+darkdetect             0.8.0
+mysql-connector-python 9.5.0
+packaging              25.0
+pillow                 12.0.0
+pip                    25.2
+(entornovirtual) PS C:\UniformesBambiPOS> code .
+(entornovirtual) PS C:\UniformesBambiPOS>
