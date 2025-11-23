@@ -128,7 +128,7 @@ DROP TABLE IF EXISTS `UniformesBambi`.`Usuario` ;
 CREATE TABLE IF NOT EXISTS `UniformesBambi`.`Usuario` (
   `id_usuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre_usuario` VARCHAR(50) NULL,
-  `contraseña_hash` VARCHAR(255) NULL,
+  `contrasena_hash` VARCHAR(255) NULL,
   `rol_usuario` ENUM('admin', 'vendedor', 'otro') NULL,
   PRIMARY KEY (`id_usuario`))
 ENGINE = InnoDB;
