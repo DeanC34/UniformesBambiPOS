@@ -24,7 +24,7 @@ class ProductosUI(ctk.CTkFrame):
         self.sidebar_visible = False
 
         self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#21416B")
-        self.sidebar.place(x=-300, y=80, relheight=1)  # <-- empezamos oculto pero 60px abajo
+        self.sidebar.place(x=-300, y=120, relheight=1)  # <-- empezamos oculto pero 60px abajo
         self.sidebar.lift()
         self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
         self.sidebar.grid_propagate(False)
@@ -355,14 +355,14 @@ class ProductosUI(ctk.CTkFrame):
         if self.sidebar_visible:
             # Ocultar (slide hacia la izquierda)
             for x in range(0, 301, 20):
-                self.sidebar.place(x=0 - x, y=80)
+                self.sidebar.place(x=0 - x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = False
         else:
             # Mostrar (slide hacia la derecha)
             self.sidebar.lift()
             for x in range(-300, 1, 20):
-                self.sidebar.place(x=x, y=80)
+                self.sidebar.place(x=x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = True
 

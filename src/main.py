@@ -1,16 +1,22 @@
 import customtkinter as ctk
 from ui.ui_productos import ProductosUI
 from ui.ui_empleados import EmpleadosUI
+from ui.ui_clientes import ClientesUI
+from ui.ui_proveedor import ProveedoresUI
+from ui.ui_compra import ComprasUI
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
 
 app = ctk.CTk()
 app.title("Uniformes Bambi - Administración")
-app.geometry("900x600")
+app.geometry("1280x720")
 
 #ProductosUI(app)
-EmpleadosUI(app)
+#EmpleadosUI(app)
+#ClientesUI(app)
+#ProveedoresUI(app)
+ComprasUI(app)
 
 app.mainloop()
 

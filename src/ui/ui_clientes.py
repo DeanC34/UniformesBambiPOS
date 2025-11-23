@@ -4,10 +4,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
-from src.crud.crud_empleado import *
-from src.crud.crud_usuario import obtener_usuarios  # asumo que este método existe y devuelve lista de dicts
+from src.crud.crud_cliente import *
 
-class EmpleadosUI(ctk.CTkFrame):
+class ClientesUI(ctk.CTkFrame):
 
     def __init__(self, master):
         super().__init__(master)
@@ -27,20 +26,21 @@ class EmpleadosUI(ctk.CTkFrame):
         self.sidebar = ctk.CTkFrame(
             self,
             width=300,
-            fg_color="#21416B"   # dark-blue
+            fg_color="#21416B"
         )
 
         # Sidebar inicialmente fuera del canvas (oculta a la izquierda)
         self.sidebar.place(
-            x=-300,               # completamente fuera a la izquierda
-            y=120,                 # NO tapa el botón
-            relheight=1           # ocupa toda la altura restante
+            x=-300,
+            y=120,
+            relheight=1
         )
 
+        # Truco para que NO afecte el grid del resto de widgets
         self.sidebar.lift()
-        self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
+        self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
         self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()
+        self.sidebar.grid_remove()  # Sin esto, tapa todo
 
         menu_items = [
             "Inicio",
@@ -81,17 +81,17 @@ class EmpleadosUI(ctk.CTkFrame):
         )
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
-        # Ajuste del layout principal
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=0)
-        self.grid_rowconfigure(2, weight=5)
-        self.grid_rowconfigure(3, weight=1)
+        # Ajuste del layout principal - orden de renderizacion fila y columna
+        self.grid_rowconfigure(0, weight=0)  # Botón menú
+        self.grid_rowconfigure(1, weight=0)  # Titulo principal
+        self.grid_rowconfigure(2, weight=5)  # Área de Interacción (título + botones)
+        self.grid_rowconfigure(3, weight=1)  # Tabla (solo la tabla)
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
 
         # ---------- TÍTULO PRINCIPAL ----------
-        title = ctk.CTkLabel(self, text="Gestión de Empleados", font=self.fuente_titulo)
+        title = ctk.CTkLabel(self, text="Gestión de Clientes", font=self.fuente_titulo)
         title.grid(row=1, column=0, columnspan=2, pady=20, sticky="n")
 
         # ---------- ESTILO TABLA OSCURA ----------
@@ -112,46 +112,64 @@ class EmpleadosUI(ctk.CTkFrame):
         )
         style.map("Treeview", background=[("selected", "#444")])
 
+        # ---- CONTENEDOR PARA LA TABLA ----
+        self.tabla_frame = ctk.CTkFrame(self)
+        self.tabla_frame.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+
+        # El frame de la tabla debe poder crecer
+        self.tabla_frame.grid_rowconfigure(0, weight=1)
+        self.tabla_frame.grid_columnconfigure(0, weight=1)
+        self.tabla_frame.grid_columnconfigure(1, weight=0)
+
         # ---------- TABLA ----------
-        self.tree = ttk.Treeview(self, columns=("ID", "Nombre", "Puesto", "Teléfono", "Rol", "Usuario"), show="headings")
+        self.tree = ttk.Treeview(self.tabla_frame, columns=("ID", "Nombre", "Teléfono", "Correo", "Dirección"), show="headings")
         self.tree.heading("ID", text="ID")
         self.tree.heading("Nombre", text="Nombre")
-        self.tree.heading("Puesto", text="Puesto")
         self.tree.heading("Teléfono", text="Teléfono")
-        self.tree.heading("Rol", text="Rol")
-        self.tree.heading("Usuario", text="Usuario")
+        self.tree.heading("Correo", text="Correo")
+        self.tree.heading("Dirección", text="Dirección")
 
         # columnas anchos recomendados
         self.tree.column("ID", width=60, anchor="center")
         self.tree.column("Nombre", width=220)
-        self.tree.column("Puesto", width=150)
-        self.tree.column("Teléfono", width=120, anchor="center")
-        self.tree.column("Rol", width=100, anchor="center")
-        self.tree.column("Usuario", width=180)
+        self.tree.column("Teléfono", width=140, anchor="center")
+        self.tree.column("Correo", width=200)
+        self.tree.column("Dirección", width=300)
 
-        self.tree.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+        # ---- TABLA (fila 0) ----
+        self.tree.grid(row=0, column=0, sticky="nsew", padx=0, pady=0)
 
-        scrollbar = ctk.CTkScrollbar( # scrollbar nueva
-            self,
-            command=self.tree.yview,
-            width=14,
-            fg_color="#1a1a1a",
-            button_color="#21416B",
-            button_hover_color="#142944"
-        )
-        scrollbar.grid(row=2, column=0, sticky="nse")
-        self.tree.configure(yscrollcommand=scrollbar.set)
+        # Scrollbar estilizada usando CTkScrollbar
+        try:
+            scrollbar = ctk.CTkScrollbar(
+                self.tabla_frame,
+                command=self.tree.yview,
+                width=14,
+                fg_color="#1a1a1a",
+                button_color="#21416B",
+                button_hover_color="#142944"
+            )
+            # ---- SCROLLBAR (fila 0, otra columna) ----
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            self.tree.configure(yscrollcommand=scrollbar.set)
+        except Exception:
+            # fallback a la scrollbar clásica de ttk si CTkScrollbar no está disponible
+            scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
+            # ---- SCROLLBAR (fila 0, otra columna) ----
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            self.tree.configure(yscrollcommand=scrollbar.set)
 
         # ============================================================
         #  ÁREA DE INTERACCIÓN (botones)
         # ============================================================
-        interaccion_title = ctk.CTkLabel(self, text="Área de Interacción", font=self.fuente_subtitulo)
-        interaccion_title.grid(row=2, column=1, sticky="n", pady=(10, 0))
 
         btn_frame = ctk.CTkFrame(self)
         btn_frame.grid(row=2, column=1, padx=10, pady=(40, 0), sticky="nsew")
         btn_frame.grid_rowconfigure((0,1,2,3), weight=1)
         btn_frame.grid_columnconfigure(0, weight=1)
+
+        interaccion_title = ctk.CTkLabel(btn_frame, text="Área de Interacción", font=self.fuente_subtitulo)
+        interaccion_title.grid(row=0, column=0, sticky="n", pady=(0, 10))
 
         btn_style = {
             "width": 140,
@@ -163,40 +181,60 @@ class EmpleadosUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_empleado, **btn_style).grid(row=0, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_empleados, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_cliente, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_clientes, **btn_style).grid(row=4, column=0, pady=10, sticky="nsew")
 
         # ============================================================
         #  ÁREA DE CAMPOS
         # ============================================================
-        campos_title = ctk.CTkLabel(self, text="Área de Campos", font=self.fuente_subtitulo)
-        campos_title.grid(row=3, column=0, columnspan=2, sticky="n", pady=(10, 0))
 
         form = ctk.CTkFrame(self)
-        form.grid(row=3, column=0, columnspan=2, pady=(40,10), padx=10, sticky="nsew")
+        form.grid(row=3, column=0, columnspan=2, pady=(20,10), padx=10, sticky="nsew")
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
+        
+        campos_title = ctk.CTkLabel(form, text="Área de Campos", font=self.fuente_subtitulo)
+        campos_title.grid(row=0, column=0, columnspan=2, pady=(10, 0))
 
-        # Campos del formulario
+        # Campos del formulario (Entry cortos + Textarea para dirección)
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
-
-        self.puesto = ctk.CTkEntry(form, placeholder_text="Puesto", font=self.fuente_normal)
-        self.puesto.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+        self.nombre.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.telefono.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
 
-        # OptionMenu Rol
-        self.rol = ctk.CTkOptionMenu(form, values=["admin", "vendedor", "otro"], font=self.fuente_normal)
-        self.rol.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.correo = ctk.CTkEntry(form, placeholder_text="Correo", font=self.fuente_normal)
+        self.correo.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
 
-        # OptionMenu Usuario (lista formateada "id - nombre (rol)")
-        usuarios_list = self._cargar_usuarios_para_optionmenu()
-        self.usuario_option = ctk.CTkOptionMenu(form, values=usuarios_list, font=self.fuente_normal)
-        self.usuario_option.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        # textbox para dirección (intentar usar CTkTextbox si existe)
+        try:
+            self.direccion = ctk.CTkTextbox(form, width=1, height=80)
+            self.direccion.configure(font=self.fuente_normal)
+            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+
+            # --- Placeholder ---
+            self.direccion_placeholder = "Dirección"
+            self.direccion.insert("1.0", self.direccion_placeholder)
+            self.direccion.configure(text_color="#8a8a8a")  # gris suave
+
+            def clear_placeholder(event):
+                if self.direccion.get("1.0", "end-1c") == self.direccion_placeholder:
+                    self.direccion.delete("1.0", "end")
+                    self.direccion.configure(text_color="white")
+
+            def restore_placeholder(event):
+                if self.direccion.get("1.0", "end-1c").strip() == "":
+                    self.direccion.insert("1.0", self.direccion_placeholder)
+                    self.direccion.configure(text_color="#8a8a8a")
+
+            self.direccion.bind("<FocusIn>", clear_placeholder)
+            self.direccion.bind("<FocusOut>", restore_placeholder)
+
+        except Exception:
+            self.direccion = tk.Text(form, height=4, wrap="word", font=("Segoe UI", 12))
+            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
         # campo oculto id seleccionado
         self.id_seleccionado = None
@@ -205,27 +243,16 @@ class EmpleadosUI(ctk.CTkFrame):
         self.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
 
         # cargar inicialmente
-        self.mostrar_empleados()
+        self.mostrar_clientes()
 
     # -------------------------
     # helpers / util
     # -------------------------
-    def _cargar_usuarios_para_optionmenu(self):
-        try:
-            usuarios = obtener_usuarios()  # se espera lista de dicts: id_usuario, nombre_usuario, rol_usuario
-        except Exception:
-            usuarios = []
-
-        valores = []
-        for u in usuarios:
-            uid = u.get("id_usuario", "")
-            nombre = u.get("nombre_usuario", "")
-            rol = u.get("rol_usuario", "")
-            valores.append(f"{uid} - {nombre} ({rol})")
-        # al menos un valor por defecto
-        if not valores:
-            valores = ["0 - (sin usuarios)"]
-        return valores
+    def _truncate(self, text, length=60):
+        if not text:
+            return ""
+        t = str(text)
+        return (t if len(t) <= length else t[:length-3] + "...")
 
     def popup(self, titulo, mensaje):
         win = ctk.CTkToplevel(self)
@@ -242,36 +269,31 @@ class EmpleadosUI(ctk.CTkFrame):
     def validar_campos(self):
         if not self.nombre.get().strip():
             return "El campo NOMBRE está vacío."
-        if not self.puesto.get().strip():
-            return "El campo PUESTO está vacío."
-        # teléfono opcional
+        # teléfono y correo opcionales pero limpiar espacios
         return None
 
     # -------------------------
-    # CRUD real usando src/crud/crud_empleado.py
+    # CRUD real usando src/crud/crud_cliente.py
     # -------------------------
-    def mostrar_empleados(self):
+    def mostrar_clientes(self):
         # limpiar
         for r in self.tree.get_children():
             self.tree.delete(r)
 
         try:
-            empleados = obtener_empleados()
+            clientes = obtener_clientes()
         except Exception as e:
-            print("Error obtener_empleados:", e)
-            empleados = []
+            print("Error obtener_clientes:", e)
+            clientes = []
 
-        for e in empleados:
-            usuario_id = e.get("Usuario_id_usuario")
-            # mostrar usuario como 'id' (si existe)
-            usuario_text = str(usuario_id) if usuario_id else ""
+        for c in clientes:
+            direccion = c.get("direccion_cliente") or ""
             self.tree.insert("", "end", values=(
-                e.get("id_empleado"),
-                e.get("nombre_empleado"),
-                e.get("puesto_empleado"),
-                e.get("telefono_empleado"),
-                e.get("rol_empleado"),
-                usuario_text
+                c.get("id_cliente"),
+                c.get("nombre_cliente"),
+                c.get("telefono_cliente"),
+                c.get("correo_cliente"),
+                self._truncate(direccion, 60)
             ))
 
     def on_tree_select(self, event):
@@ -279,91 +301,56 @@ class EmpleadosUI(ctk.CTkFrame):
         if not sel:
             return
         item = self.tree.item(sel[0])
-        id_empleado = item["values"][0]
+        id_cliente = item["values"][0]
         # obtener datos completos
-        empleado = obtener_empleado_por_id(id_empleado)
-        if not empleado:
+        cliente = obtener_cliente_por_id(id_cliente)
+        if not cliente:
             return
 
-        self.id_seleccionado = id_empleado
+        self.id_seleccionado = id_cliente
         self.nombre.delete(0, "end")
-        self.nombre.insert(0, empleado.get("nombre_empleado", "") or "")
-
-        self.puesto.delete(0, "end")
-        self.puesto.insert(0, empleado.get("puesto_empleado", "") or "")
+        self.nombre.insert(0, cliente.get("nombre_cliente", "") or "")
 
         self.telefono.delete(0, "end")
-        self.telefono.insert(0, empleado.get("telefono_empleado", "") or "")
+        self.telefono.insert(0, cliente.get("telefono_cliente", "") or "")
 
-        rol_val = empleado.get("rol_empleado", "") or "vendedor"
-        # ajustar rol option
+        self.correo.delete(0, "end")
+        self.correo.insert(0, cliente.get("correo_cliente", "") or "")
+
+        direccion = cliente.get("direccion_cliente", "") or ""
         try:
-            self.rol.set(rol_val)
+            # CTkTextbox
+            self.direccion.delete("0.0", "end")
+            self.direccion.insert("0.0", direccion)
         except Exception:
-            pass
+            # tk.Text
+            self.direccion.delete("1.0", "end")
+            self.direccion.insert("1.0", direccion)
 
-        # ajustar usuario option: si tiene Usuario_id_usuario, seleccionar la opción formateada
-        uid = empleado.get("Usuario_id_usuario")
-        if uid:
-            # construir label tal cual la OptionMenu (buscar en sus valores)
-            values = self.usuario_option._options if hasattr(self.usuario_option, "_options") else self.usuario_option.cget("values")
-            # generar target like "id - name (rol)" pero si no encontramos nombre/rol solo con id
-            target = None
-            try:
-                usuarios = obtener_usuarios()
-                for u in usuarios:
-                    if u.get("id_usuario") == uid:
-                        target = f"{u.get('id_usuario')} - {u.get('nombre_usuario')} ({u.get('rol_usuario')})"
-                        break
-            except Exception:
-                target = None
-            if target:
-                try:
-                    self.usuario_option.set(target)
-                except Exception:
-                    pass
-            else:
-                # fallback: set to id
-                try:
-                    self.usuario_option.set(str(uid))
-                except Exception:
-                    pass
-        else:
-            # no tiene usuario asignado
-            try:
-                self.usuario_option.set(self.usuario_option.cget("values")[0])
-            except Exception:
-                pass
-
-    def crear_empleado(self):
+    def crear_cliente(self):
         error = self.validar_campos()
         if error:
             self.popup("Error", error)
             return
 
         nombre = self.nombre.get().strip()
-        puesto = self.puesto.get().strip()
         telefono = self.telefono.get().strip()
-        rol = self.rol.get().strip()
-
-        # Usuario: extraer id si la opción sigue formato "id - name (rol)"
-        usuario_raw = self.usuario_option.get()
-        usuario_id = None
+        correo = self.correo.get().strip()
         try:
-            usuario_id = int(usuario_raw.split(" - ")[0])
+            direccion = self.direccion.get("0.0", "end").strip()
         except Exception:
-            usuario_id = None
+            direccion = self.direccion.get("1.0", "end").strip()
 
-        ok = crear_empleado(nombre, puesto, telefono, rol, usuario_id)
+        ok = crear_cliente(nombre, telefono, correo, direccion)
         if ok:
-            self.popup("Éxito", "Empleado creado correctamente.")
-            self.mostrar_empleados()
+            self.popup("Éxito", "Cliente creado correctamente.")
+            self.mostrar_clientes()
         else:
-            self.popup("Error", "No se pudo crear el empleado.")
+            self.popup("Error", "No se pudo crear el cliente.")
 
     def confirmar_actualizacion_popup(self):
         if not self.id_seleccionado:
-            self.popup("Error", "Selecciona un empleado primero.")
+            self.popup("Error", "Selecciona un cliente primero.")
             return
 
         error = self.validar_campos()
@@ -371,7 +358,6 @@ class EmpleadosUI(ctk.CTkFrame):
             self.popup("Error", error)
             return
 
-        # obtener nombre del empleado para mostrar
         nombre = self.nombre.get().strip() or "(sin nombre)"
         win = ctk.CTkToplevel(self)
         win.title("Confirmar actualización")
@@ -386,12 +372,12 @@ class EmpleadosUI(ctk.CTkFrame):
         ctk.CTkButton(win, text="Cancelar", fg_color="#333", hover_color="#222", command=win.destroy, font=self.fuente_normal).pack(pady=4)
 
     def _do_update_and_close(self, win):
-        self.actualizar_empleado()
+        self.actualizar_cliente()
         win.destroy()
 
-    def actualizar_empleado(self):
+    def actualizar_cliente(self):
         if not self.id_seleccionado:
-            self.popup("Error", "Selecciona un empleado primero.")
+            self.popup("Error", "Selecciona un cliente primero.")
             return
 
         error = self.validar_campos()
@@ -400,27 +386,23 @@ class EmpleadosUI(ctk.CTkFrame):
             return
 
         nombre = self.nombre.get().strip()
-        puesto = self.puesto.get().strip()
         telefono = self.telefono.get().strip()
-        rol = self.rol.get().strip()
-
-        usuario_raw = self.usuario_option.get()
-        usuario_id = None
+        correo = self.correo.get().strip()
         try:
-            usuario_id = int(usuario_raw.split(" - ")[0])
+            direccion = self.direccion.get("0.0", "end").strip()
         except Exception:
-            usuario_id = None
+            direccion = self.direccion.get("1.0", "end").strip()
 
-        ok = actualizar_empleado(self.id_seleccionado, nombre, puesto, telefono, rol, usuario_id)
+        ok = actualizar_cliente(self.id_seleccionado, nombre, telefono, correo, direccion)
         if ok:
-            self.popup("Éxito", "Empleado actualizado correctamente.")
-            self.mostrar_empleados()
+            self.popup("Éxito", "Cliente actualizado correctamente.")
+            self.mostrar_clientes()
         else:
-            self.popup("Error", "No se pudo actualizar el empleado.")
+            self.popup("Error", "No se pudo actualizar el cliente.")
 
     def confirmar_eliminacion_popup(self):
         if not self.id_seleccionado:
-            self.popup("Error", "Selecciona un empleado primero.")
+            self.popup("Error", "Selecciona un cliente primero.")
             return
 
         win = ctk.CTkToplevel(self)
@@ -429,31 +411,35 @@ class EmpleadosUI(ctk.CTkFrame):
         win.resizable(False, False)
         win.grab_set()
 
-        ctk.CTkLabel(win, text="¿Eliminar el empleado seleccionado?", font=self.fuente_popup).pack(pady=16)
+        ctk.CTkLabel(win, text="¿Eliminar el cliente seleccionado?", font=self.fuente_popup).pack(pady=16)
         ctk.CTkButton(win, text="Sí, eliminar", fg_color="#8b0000", hover_color="#5a0000",
                       command=lambda: [self._do_delete_and_close(win)], font=self.fuente_normal).pack(pady=6)
         ctk.CTkButton(win, text="Cancelar", fg_color="#333", hover_color="#222", command=win.destroy, font=self.fuente_normal).pack(pady=4)
 
     def _do_delete_and_close(self, win):
-        self.eliminar_empleado_confirmado()
+        self.eliminar_cliente_confirmado()
         win.destroy()
 
-    def eliminar_empleado_confirmado(self):
+    def eliminar_cliente_confirmado(self):
         if not self.id_seleccionado:
-            self.popup("Error", "Selecciona un empleado primero.")
+            self.popup("Error", "Selecciona un cliente primero.")
             return
 
-        ok = eliminar_empleado(self.id_seleccionado)
+        ok = eliminar_cliente(self.id_seleccionado)
         if ok:
-            self.popup("Éxito", "Empleado eliminado.")
-            self.mostrar_empleados()
+            self.popup("Éxito", "Cliente eliminado.")
+            self.mostrar_clientes()
             self.id_seleccionado = None
             # limpiar campos
             self.nombre.delete(0, "end")
-            self.puesto.delete(0, "end")
             self.telefono.delete(0, "end")
+            self.correo.delete(0, "end")
+            try:
+                self.direccion.delete("0.0", "end")
+            except Exception:
+                self.direccion.delete("1.0", "end")
         else:
-            self.popup("Error", "No se pudo eliminar el empleado.")
+            self.popup("Error", "No se pudo eliminar el cliente.")
 
     # ============================================================
     #  SIDEBAR OVERLAY (slide con place)
