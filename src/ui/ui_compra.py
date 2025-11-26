@@ -1,6 +1,3 @@
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
@@ -343,12 +340,15 @@ class ComprasUI(ctk.CTkFrame):
         self.mostrar_detalles(id_compra)
 
     def mostrar_detalles(self, id_compra):
+
+        id_compra = int(id_compra)
+
         for row in self.tree_detalle.get_children():
             self.tree_detalle.delete(row)
 
         detalles = obtener_detalles_compra()
         for d in detalles:
-            if d["Compra_id_compra"] == id_compra:
+            if int(d["Compra_id_compra"]) == id_compra:
                 self.tree_detalle.insert("", "end", values=(
                     d["id_compra_detalle"],
                     d["cantidad"],
@@ -356,6 +356,7 @@ class ComprasUI(ctk.CTkFrame):
                     d["VariacionProducto_id_variacion"],
                     d["Compra_id_compra"]
                 ))
+
 
     # ======================================================================
     # ---------------------------- CRUD COMPRA ------------------------------
@@ -384,17 +385,29 @@ class ComprasUI(ctk.CTkFrame):
     # ---------------------------- CRUD DETALLE -----------------------------
     # ======================================================================
     def agregar_detalle(self):
+        print(">>> agregar_detalle() fue llamado")
         sel = self.tree_compras.selection()
         if not sel:
             return
+
         id_compra = self.tree_compras.item(sel[0])["values"][0]
 
-        crear_detalle_compra(
+        print("📌 DEBUG ➜ Enviando:",
             self.det_cantidad.get(),
             self.det_precio.get(),
             self.det_variacion.get(),
-            id_compra
-        )
+            id_compra)
+
+        try:
+            cantidad = int(self.det_cantidad.get())
+            precio = float(self.det_precio.get())
+            variacion = int(self.det_variacion.get())
+            compra = int(id_compra)
+        except ValueError:
+            print("❌ Error: uno de los valores no es numérico.")
+            return
+
+        crear_detalle_compra(cantidad, precio, variacion, compra)
 
         self.mostrar_detalles(id_compra)
 
