@@ -41,6 +41,7 @@ class ComprasUI(ctk.CTkFrame):
         # Carga inicial
         self.mostrar_compras()
 
+
     # =======================================================================
     # -------------------------- SIDEBAR -----------------------------------
     # =======================================================================
@@ -86,25 +87,25 @@ class ComprasUI(ctk.CTkFrame):
         )
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
+
     # =======================================================================
     # ----------------------- LAYOUT PRINCIPAL ------------------------------
     # =======================================================================
     def _configurar_layout(self):
-        self.grid_rowconfigure(0, weight=0)   # Toggle menú
-        self.grid_rowconfigure(0, weight=0)   # Título
-        self.grid_rowconfigure(1, weight=1)   # Tabla compras
-        self.grid_rowconfigure(2, weight=2)   # Campos compra
-        self.grid_rowconfigure(3, weight=4)   # Tabla detalles + campos detalle
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=2)
+        self.grid_rowconfigure(3, weight=4)
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
+
 
     # =======================================================================
     # --------------------------- TABLA COMPRAS ------------------------------
     # =======================================================================
     def _crear_tabla_compras(self):
 
-        # ---------- ESTILO TABLA OSCURA ----------
         style = ttk.Style()
         style.theme_use("default")
         style.configure(
@@ -122,7 +123,6 @@ class ComprasUI(ctk.CTkFrame):
         )
         style.map("Treeview", background=[("selected", "#444")])
 
-        # ---------- CONTENEDOR TABLA ----------
         self.frame_tabla_compras = ctk.CTkFrame(self)
         self.frame_tabla_compras.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
@@ -130,7 +130,6 @@ class ComprasUI(ctk.CTkFrame):
         self.frame_tabla_compras.grid_columnconfigure(0, weight=1)
         self.frame_tabla_compras.grid_columnconfigure(1, weight=0)
 
-        # ---------- TABLA COMPRAS ----------
         self.tree_compras = ttk.Treeview(
             self.frame_tabla_compras,
             columns=("ID", "Fecha", "Total", "Proveedor"),
@@ -141,7 +140,6 @@ class ComprasUI(ctk.CTkFrame):
         self.tree_compras.heading("Total", text="Total")
         self.tree_compras.heading("Proveedor", text="Proveedor")
 
-        # Ajustes de columnas
         self.tree_compras.column("ID", width=60, anchor="center")
         self.tree_compras.column("Fecha", width=150)
         self.tree_compras.column("Total", width=120)
@@ -149,7 +147,6 @@ class ComprasUI(ctk.CTkFrame):
 
         self.tree_compras.grid(row=0, column=0, sticky="nsew")
 
-        # ---------- SCROLLBAR OSCURA ----------
         try:
             scrollbar = ctk.CTkScrollbar(
                 self.frame_tabla_compras,
@@ -167,7 +164,6 @@ class ComprasUI(ctk.CTkFrame):
             scrollbar.grid(row=0, column=1, sticky="ns")
             self.tree_compras.configure(yscrollcommand=scrollbar.set)
 
-        # Evento seleccionar compra
         self.tree_compras.bind("<<TreeviewSelect>>", self.on_select_compra)
 
 
@@ -199,6 +195,7 @@ class ComprasUI(ctk.CTkFrame):
         ctk.CTkButton(btn_frame, text="Eliminar", command=self.eliminar_compra, **style).grid(row=3, column=0, pady=5)
         ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_compras, **style).grid(row=4, column=0, pady=5)
 
+
     # ======================================================================
     # --------------------------- CAMPOS COMPRA -----------------------------
     # ======================================================================
@@ -220,12 +217,12 @@ class ComprasUI(ctk.CTkFrame):
         self.proveedor = ctk.CTkEntry(form, placeholder_text="ID Proveedor")
         self.proveedor.grid(row=2, column=2, padx=5, pady=5, sticky="ew")
 
+
     # ======================================================================
     # --------------------- TABLA DETALLES DE COMPRA -----------------------
     # ======================================================================
     def _crear_tabla_detalles(self):
 
-        # ---------- CONTENEDOR TABLA ----------
         self.frame_detalles = ctk.CTkFrame(self)
         self.frame_detalles.grid(row=3, column=0, sticky="nsew", padx=15, pady=10)
 
@@ -233,7 +230,6 @@ class ComprasUI(ctk.CTkFrame):
         self.frame_detalles.grid_columnconfigure(0, weight=1)
         self.frame_detalles.grid_columnconfigure(1, weight=0)
 
-        # ---------- TABLA DETALLES (estilo oscuro heredado) ----------
         self.tree_detalle = ttk.Treeview(
             self.frame_detalles,
             columns=("ID", "Cantidad", "Precio", "Variación", "CompraID"),
@@ -251,7 +247,6 @@ class ComprasUI(ctk.CTkFrame):
         for col, titulo in encabezados:
             self.tree_detalle.heading(col, text=titulo)
 
-        # Ajustes de columnas
         self.tree_detalle.column("ID", width=70, anchor="center")
         self.tree_detalle.column("Cantidad", width=120)
         self.tree_detalle.column("Precio", width=130)
@@ -260,7 +255,6 @@ class ComprasUI(ctk.CTkFrame):
 
         self.tree_detalle.grid(row=0, column=0, sticky="nsew")
 
-        # ---------- SCROLLBAR OSCURA ----------
         try:
             scrollbar = ctk.CTkScrollbar(
                 self.frame_detalles,
@@ -278,6 +272,7 @@ class ComprasUI(ctk.CTkFrame):
             scrollbar.grid(row=0, column=1, sticky="ns")
             self.tree_detalle.configure(yscrollcommand=scrollbar.set)
 
+
     # ======================================================================
     # ---------------------- CAMPOS DETALLE COMPRA -------------------------
     # ======================================================================
@@ -287,7 +282,7 @@ class ComprasUI(ctk.CTkFrame):
         form.grid(row=3, column=1, sticky="nsew", padx=10, pady=10)
 
         form.grid_columnconfigure(0, weight=1)
-        form.grid_rowconfigure((0,1,2,3,4), weight=1)
+        form.grid_rowconfigure((0,1,2,3,4,5), weight=1)
 
         ctk.CTkLabel(form, text="Detalles de Compra", font=self.fuente_subtitulo)\
             .grid(row=0, column=0, pady=10)
@@ -301,9 +296,14 @@ class ComprasUI(ctk.CTkFrame):
         self.det_variacion = ctk.CTkEntry(form, placeholder_text="ID Variación Producto")
         self.det_variacion.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
 
+        # ⭐ Campo añadido (autollenado)
+        self.det_compra = ctk.CTkEntry(form, placeholder_text="ID Compra (auto)")
+        self.det_compra.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
+
         ctk.CTkButton(form, text="Agregar Detalle", fg_color="#21416B",
                       command=self.ui_agregar_detalle)\
-            .grid(row=4, column=0, pady=10, sticky="ew")
+            .grid(row=5, column=0, pady=10, sticky="ew")
+
 
     # ======================================================================
     # ------------------------ CARGA DE DATOS -------------------------------
@@ -338,6 +338,10 @@ class ComprasUI(ctk.CTkFrame):
 
         self.proveedor.delete(0, "end")
         self.proveedor.insert(0, compra["Proveedor_id_proveedor"])
+
+        # 👉 Autollenar ID de compra en el formulario de detalle
+        self.det_compra.delete(0, "end")
+        self.det_compra.insert(0, id_compra)
 
         # Cargar detalles
         self.mostrar_detalles(id_compra)
@@ -384,22 +388,18 @@ class ComprasUI(ctk.CTkFrame):
         eliminar_compra(id_compra)
         self.mostrar_compras()
 
+
     # ======================================================================
     # ---------------------------- CRUD DETALLE -----------------------------
     # ======================================================================
     def ui_agregar_detalle(self):
         print(">>> ui_agregar_detalle() fue llamado")
-        sel = self.tree_compras.selection()
-        if not sel:
-            return
-
-        id_compra = self.tree_compras.item(sel[0])["values"][0]
 
         try:
             cantidad = int(self.det_cantidad.get())
             precio = float(self.det_precio.get())
             variacion = int(self.det_variacion.get())
-            compra = int(id_compra)
+            compra = int(self.det_compra.get())  # ← ahora sí llega lleno
         except ValueError:
             print("❌ Error: uno de los valores no es numérico.")
             return
