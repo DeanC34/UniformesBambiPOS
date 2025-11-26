@@ -1,7 +1,9 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
-from src.crud.crud_producto import *
+from crud.crud_producto import *
 
 class ProductosUI(ctk.CTkFrame):
 

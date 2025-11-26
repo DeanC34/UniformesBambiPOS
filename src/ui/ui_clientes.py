@@ -1,7 +1,10 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
-from src.crud.crud_cliente import *
+from crud.crud_cliente import *
 
 class ClientesUI(ctk.CTkFrame):
 

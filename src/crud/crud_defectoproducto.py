@@ -1,4 +1,4 @@
-from src.database.db_connector import conectar_bd
+from database.db_connector import conectar_bd
 from mysql.connector import Error
 
 ##############################

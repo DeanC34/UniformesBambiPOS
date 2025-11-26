@@ -1,9 +1,12 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
 
-from src.crud.crud_compra import *
-from src.crud.crud_compradetalle import *
+from crud.crud_compra import *
+from crud.crud_compradetalle import *
 
 class ComprasUI(ctk.CTkFrame):
 
@@ -299,7 +302,7 @@ class ComprasUI(ctk.CTkFrame):
         self.det_variacion.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
 
         ctk.CTkButton(form, text="Agregar Detalle", fg_color="#21416B",
-                      command=self.agregar_detalle)\
+                      command=self.ui_agregar_detalle)\
             .grid(row=4, column=0, pady=10, sticky="ew")
 
     # ======================================================================
@@ -384,19 +387,13 @@ class ComprasUI(ctk.CTkFrame):
     # ======================================================================
     # ---------------------------- CRUD DETALLE -----------------------------
     # ======================================================================
-    def agregar_detalle(self):
-        print(">>> agregar_detalle() fue llamado")
+    def ui_agregar_detalle(self):
+        print(">>> ui_agregar_detalle() fue llamado")
         sel = self.tree_compras.selection()
         if not sel:
             return
 
         id_compra = self.tree_compras.item(sel[0])["values"][0]
-
-        print("📌 DEBUG ➜ Enviando:",
-            self.det_cantidad.get(),
-            self.det_precio.get(),
-            self.det_variacion.get(),
-            id_compra)
 
         try:
             cantidad = int(self.det_cantidad.get())
@@ -409,7 +406,9 @@ class ComprasUI(ctk.CTkFrame):
 
         crear_detalle_compra(cantidad, precio, variacion, compra)
 
-        self.mostrar_detalles(id_compra)
+        # Recarga TOTAL asegurando coherencia
+        self.on_select_compra(None)
+
 
     # ======================================================================
     # ------------------------- SIDEBAR ANIMADO -----------------------------

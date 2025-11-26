@@ -1,9 +1,12 @@
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
 
 # Importar CRUD de Proveedores
-from src.crud.crud_proveedor import (
+from crud.crud_proveedor import (
     obtener_proveedores,
     crear_proveedor,
     obtener_proveedor_por_id,
