@@ -4,6 +4,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+
 
 from crud.crud_compra import *
 from crud.crud_compradetalle import *
@@ -12,6 +14,8 @@ class ComprasUI(ctk.CTkFrame):
 
     def __init__(self, master):
         super().__init__(master)
+        # validador de fechas
+        self.register_validadores()
 
         # ---------- FUENTES ----------
         self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
@@ -208,7 +212,13 @@ class ComprasUI(ctk.CTkFrame):
         ctk.CTkLabel(form, text="Datos de la Compra", font=self.fuente_subtitulo)\
             .grid(row=0, column=0, columnspan=3, pady=10)
 
-        self.fecha = ctk.CTkEntry(form, placeholder_text="Fecha (YYYY-MM-DD)")
+        self.fecha = ctk.CTkEntry(
+            form,
+            placeholder_text="Fecha (YYYY-MM-DD)",
+            validate="key",
+            validatecommand=self.vcmd_fecha
+        )
+
         self.fecha.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
 
         self.total = ctk.CTkEntry(form, placeholder_text="Total")
@@ -364,11 +374,56 @@ class ComprasUI(ctk.CTkFrame):
                     d["Compra_id_compra"]
                 ))
 
+    #Validador de fechas
+    import datetime
+
+    def register_validadores(self):
+        vcmd = (self.register(self.validar_fecha_tecla), '%P')
+        self.vcmd_fecha = vcmd
+
+
+    def validar_fecha_tecla(self, texto):
+        # Permite borrar todo
+        if texto == "/":
+            return True
+
+        # Permite solo números y guiones
+        for c in texto:
+            if not (c.isdigit() or c == "/"):
+                return False
+
+        # Máximo 10 caracteres
+        if len(texto) > 10:
+            return False
+
+        # Evita que escriban más de 4 dígitos al inicio
+        if len(texto) >= 5:
+            if texto[4] != "/":
+                return False
+
+        # Evita que escriban más de 2 dígitos en el mes
+        if len(texto) >= 8:
+            if texto[7] != "/":
+                return False
+
+        return True
+
+    def validar_fecha_completa(self, fecha_texto):
+        try:
+            datetime.datetime.strptime(fecha_texto, "%Y/%m/%d")
+            return True
+        except ValueError:
+            return False
+
 
     # ======================================================================
     # ---------------------------- CRUD COMPRA ------------------------------
     # ======================================================================
     def crear_compra(self):
+        if not self.validar_fecha_completa(self.fecha.get()):
+            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con el formato YYYY-MM-DD.")
+            return
+
         crear_compra(self.fecha.get(), self.total.get(), self.proveedor.get())
         self.mostrar_compras()
 
@@ -376,6 +431,11 @@ class ComprasUI(ctk.CTkFrame):
         sel = self.tree_compras.selection()
         if not sel:
             return
+
+        if not self.validar_fecha_completa(self.fecha.get()):
+            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con formato YYYY-MM-DD.")
+            return
+
         id_compra = self.tree_compras.item(sel[0])["values"][0]
         actualizar_compra(id_compra, self.fecha.get(), self.total.get(), self.proveedor.get())
         self.mostrar_compras()
@@ -388,12 +448,18 @@ class ComprasUI(ctk.CTkFrame):
         eliminar_compra(id_compra)
         self.mostrar_compras()
 
-
     # ======================================================================
     # ---------------------------- CRUD DETALLE -----------------------------
     # ======================================================================
     def ui_agregar_detalle(self):
         print(">>> ui_agregar_detalle() fue llamado")
+
+        if self.det_compra.get().strip() == "":
+            messagebox.showwarning(
+                "Sin compra seleccionada",
+                "Debes seleccionar una compra antes de agregar un detalle."
+            )
+            return
 
         try:
             cantidad = int(self.det_cantidad.get())
@@ -408,7 +474,6 @@ class ComprasUI(ctk.CTkFrame):
 
         # Recarga TOTAL asegurando coherencia
         self.on_select_compra(None)
-
 
     # ======================================================================
     # ------------------------- SIDEBAR ANIMADO -----------------------------

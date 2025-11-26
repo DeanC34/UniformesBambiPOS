@@ -4,6 +4,7 @@ from ui.ui_empleados import EmpleadosUI
 from ui.ui_clientes import ClientesUI
 from ui.ui_proveedor import ProveedoresUI
 from ui.ui_compra import ComprasUI
+from ui.ui_venta import VentasUI
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
@@ -17,6 +18,7 @@ app.geometry("1280x720")
 #ClientesUI(app)
 #ProveedoresUI(app)
 ComprasUI(app)
+#VentasUI(app)
 
 app.mainloop()
 
