@@ -9,6 +9,9 @@ from tkinter import messagebox
 from crud.crud_venta import *
 from crud.crud_ventadetalle import *
 
+#Validador de fechas
+import datetime
+
 class VentasUI(ctk.CTkFrame):
 
     def __init__(self, master):
@@ -31,10 +34,21 @@ class VentasUI(ctk.CTkFrame):
         self._crear_tabla_ventas()
         self._crear_area_interaccion()
         self._crear_area_campos_venta()
+        self.register_validadores()
         self._crear_tabla_detalles()
         self._crear_area_detalle_campos()
 
         self.mostrar_ventas()
+        self.after(200, self._ajustar_sidebar)
+
+    def _ajustar_sidebar(self):
+        altura_real = self.winfo_height() - 120  # margen superior
+
+        if altura_real < 100:
+            self.after(100, self._ajustar_sidebar)
+            return
+
+        self.sidebar.configure(height=altura_real)
 
     # ======================================================================
     # SIDEBAR
@@ -42,14 +56,14 @@ class VentasUI(ctk.CTkFrame):
     def _crear_sidebar(self):
         self.sidebar_visible = False
 
-        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#21416B")
-        self.sidebar.place(x=-300, y=120, relheight=1)
+        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#825c46")
+        self.sidebar.place(x=-300, y=120)
         #self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
         #self.sidebar.grid_propagate(False)
         #self.sidebar.grid_remove()
 
         menu_items = [
-            "Inicio", "Empleado", "Ventas",
+            "Inicio", "Productos", "Empleado", "Ventas",
             "Clientes", "Proveedores", "Compras",
             "Opciones", "Acerca de"
         ]
@@ -59,12 +73,13 @@ class VentasUI(ctk.CTkFrame):
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
-                hover_color="#142944",
+                hover_color="#644736",
                 text_color="white",
                 font=self.fuente_menu,
                 corner_radius=0,
                 height=45,
-                anchor="w"
+                anchor="w",
+                command=lambda n=item: self.master.mostrar_pantalla(n)
             )
             b.pack(fill="x", pady=2, padx=8)
 
@@ -73,8 +88,8 @@ class VentasUI(ctk.CTkFrame):
             text="≡",
             width=50,
             height=40,
-            fg_color="#21416B",
-            hover_color="#1A1A40",
+            fg_color="#825c46",
+            hover_color="#644736",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=self.toggle_sidebar
@@ -102,10 +117,10 @@ class VentasUI(ctk.CTkFrame):
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1a1a1a",
+            background="#2c2517",
             foreground="white",
             rowheight=20,
-            fieldbackground="#1a1a1a"
+            fieldbackground="#312b21"
         )
         style.configure(
             "Treeview.Heading",
@@ -139,9 +154,10 @@ class VentasUI(ctk.CTkFrame):
 
         self.tree_ventas.grid(row=0, column=0, sticky="nsew")
 
-        scrollbar = ttk.Scrollbar(self.frame_tabla_ventas, orient="vertical", command=self.tree_ventas.yview)
+        scrollbar = ctk.CTkScrollbar(self.frame_tabla_ventas, orientation="vertical")
         scrollbar.grid(row=0, column=1, sticky="ns")
         self.tree_ventas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=self.tree_ventas.yview)
 
         self.tree_ventas.bind("<<TreeviewSelect>>", self.on_select_venta)
 
@@ -160,8 +176,8 @@ class VentasUI(ctk.CTkFrame):
         style = {
             "width": 140,
             "height": 40,
-            "fg_color": "#21416B",
-            "hover_color": "#142944",
+            "fg_color": "#825c46",
+            "hover_color": "#644736",
             "text_color": "white",
             "corner_radius": 10,
             "font": self.fuente_normal
@@ -229,9 +245,10 @@ class VentasUI(ctk.CTkFrame):
 
         self.tree_detalle.grid(row=0, column=0, sticky="nsew")
 
-        scrollbar = ttk.Scrollbar(self.frame_detalles, orient="vertical", command=self.tree_detalle.yview)
+        scrollbar = ctk.CTkScrollbar(self.frame_detalles, orientation="vertical")
         scrollbar.grid(row=0, column=1, sticky="ns")
         self.tree_detalle.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=self.tree_detalle.yview)
 
     # ======================================================================
     # CAMPOS DETALLE
@@ -259,7 +276,7 @@ class VentasUI(ctk.CTkFrame):
         self.det_venta.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
 
         ctk.CTkButton(
-            form, text="Agregar Detalle", fg_color="#21416B",
+            form, text="Agregar Detalle", fg_color="#825c46",
             command=self.ui_agregar_detalle
         ).grid(row=5, column=0, pady=10, sticky="ew")
 
@@ -304,7 +321,6 @@ class VentasUI(ctk.CTkFrame):
         self.mostrar_detalles(id_venta)
 
     def mostrar_detalles(self, id_venta):
-
         id_venta = int(id_venta)
 
         for row in self.tree_detalle.get_children():
@@ -320,6 +336,43 @@ class VentasUI(ctk.CTkFrame):
                     d["VariacionProducto_id_variacion"],
                     d["Venta_id_venta"]
                 ))
+
+    def register_validadores(self):
+        self.vcmd_fecha = (self.register(self.validar_fecha_tecla), "%P")
+        self.fecha.configure(validate="key", validatecommand=self.vcmd_fecha)
+
+    def validar_fecha_tecla(self, texto):
+        # Permite borrar todo
+        if texto == "-":
+            return True
+
+        # Permite solo números y guiones
+        for c in texto:
+            if not (c.isdigit() or c == "-"):
+                return False
+
+        # Máximo 10 caracteres
+        if len(texto) > 10:
+            return False
+
+        # Evita que escriban más de 4 dígitos al inicio
+        if len(texto) >= 5:
+            if texto[4] != "-":
+                return False
+
+        # Evita que escriban más de 2 dígitos en el mes
+        if len(texto) >= 8:
+            if texto[7] != "-":
+                return False
+
+        return True
+
+    def validar_fecha_completa(self, fecha_texto):
+        try:
+            datetime.datetime.strptime(fecha_texto, "%Y-%m-%d")
+            return True
+        except ValueError:
+            return False
 
     # ======================================================================
     # CRUD VENTAS
@@ -348,8 +401,6 @@ class VentasUI(ctk.CTkFrame):
     # CRUD DETALLE
     # ======================================================================
     def ui_agregar_detalle(self):
-        print(">>> ui_agregar_detalle_venta() fue llamado")
-
         if self.det_venta.get().strip() == "":
             messagebox.showwarning(
                 "Sin venta seleccionada",
@@ -357,18 +408,16 @@ class VentasUI(ctk.CTkFrame):
             )
             return
 
-
         try:
             cantidad = int(self.det_cantidad.get())
-            precio_unitario = float(self.det_precio.get())
+            precio = float(self.det_precio.get())
             variacion = int(self.det_variacion.get())
             venta = int(self.det_venta.get())
-
         except ValueError:
-            print("❌ Error: valores no numéricos.")
+            print("❌ Valores no válidos en detalle de venta")
             return
 
-        crear_detalle_venta(cantidad, precio_unitario, variacion, venta)
+        crear_detalle_venta(cantidad, precio, variacion, venta)
 
         self.on_select_venta(None)
 

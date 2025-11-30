@@ -27,7 +27,7 @@ class EmpleadosUI(ctk.CTkFrame):
         self.sidebar = ctk.CTkFrame(
             self,
             width=300,
-            fg_color="#825c46"   # dark-blue
+            fg_color="#825c46"   
         )
 
         self.sidebar.place(x=-300, y=120)  # sin relheight
@@ -40,6 +40,7 @@ class EmpleadosUI(ctk.CTkFrame):
 
         menu_items = [
             "Inicio",
+            "Productos",
             "Empleado",
             "Ventas",
             "Clientes",
@@ -241,8 +242,8 @@ class EmpleadosUI(ctk.CTkFrame):
         ctk.CTkButton(
             win,
             text="Cerrar",
-            fg_color="#21416B",
-            hover_color="#14273F",
+            fg_color="#825c46",
+            hover_color="#644736",
             command=win.destroy
         ).pack(pady=10)
 
@@ -391,7 +392,7 @@ class EmpleadosUI(ctk.CTkFrame):
 
         ctk.CTkLabel(win, text=f"¿Estás seguro de actualizar ID: {self.id_seleccionado}\nNombre: {nombre}?", font=self.fuente_popup).pack(pady=16)
 
-        ctk.CTkButton(win, text="Confirmar", fg_color="#21416B", hover_color="#142944",
+        ctk.CTkButton(win, text="Confirmar", fg_color="#825c46", hover_color="#644736",
                       command=lambda: [self._do_update_and_close(win)], font=self.fuente_normal).pack(pady=6)
         ctk.CTkButton(win, text="Cancelar", fg_color="#333", hover_color="#222", command=win.destroy, font=self.fuente_normal).pack(pady=4)
 

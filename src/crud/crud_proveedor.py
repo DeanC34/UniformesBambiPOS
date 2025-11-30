@@ -4,6 +4,7 @@ from mysql.connector import Error
 ##############################
 # CRUD TABLA: PROVEEDOR
 ##############################
+
 def obtener_proveedores():
     conexion = conectar_bd()
     proveedores = []
@@ -15,13 +16,28 @@ def obtener_proveedores():
                 FROM Proveedor
                 ORDER BY nombre_proveedor ASC
             """)
-            proveedores = cursor.fetchall()
+
+            datos = cursor.fetchall()
+
+            # Normalizar claves
+            proveedores = [
+                {
+                    "id_proveedor": p["id_proveedor"],
+                    "nombre": p["nombre_proveedor"],
+                    "telefono": p["telefono_proveedor"],
+                    "correo": p["correo_proveedor"],
+                    "direccion": p["direccion_proveedor"]
+                }
+                for p in datos
+            ]
+
         except Error as error:
             print(f"❌ Error obteniendo proveedores: {error}")
         finally:
             cursor.close()
             conexion.close()
     return proveedores
+
 
 def crear_proveedor(nombre, telefono, correo, direccion):
     conexion = conectar_bd()
@@ -42,6 +58,7 @@ def crear_proveedor(nombre, telefono, correo, direccion):
             cursor.close()
             conexion.close()
 
+
 def obtener_proveedor_por_id(id_proveedor):
     conexion = conectar_bd()
     proveedor = None
@@ -53,13 +70,24 @@ def obtener_proveedor_por_id(id_proveedor):
                 FROM Proveedor
                 WHERE id_proveedor=%s
             """, (id_proveedor,))
-            proveedor = cursor.fetchone()
+
+            p = cursor.fetchone()
+            if p:
+                proveedor = {
+                    "id_proveedor": p["id_proveedor"],
+                    "nombre": p["nombre_proveedor"],
+                    "telefono": p["telefono_proveedor"],
+                    "correo": p["correo_proveedor"],
+                    "direccion": p["direccion_proveedor"]
+                }
+
         except Error as error:
             print(f"❌ Error obteniendo proveedor: {error}")
         finally:
             cursor.close()
             conexion.close()
     return proveedor
+
 
 def actualizar_proveedor(id_proveedor, nombre, telefono, correo, direccion):
     conexion = conectar_bd()
@@ -80,6 +108,7 @@ def actualizar_proveedor(id_proveedor, nombre, telefono, correo, direccion):
         finally:
             cursor.close()
             conexion.close()
+
 
 def eliminar_proveedor(id_proveedor):
     conexion = conectar_bd()

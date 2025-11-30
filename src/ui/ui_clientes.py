@@ -26,15 +26,11 @@ class ClientesUI(ctk.CTkFrame):
         self.sidebar = ctk.CTkFrame(
             self,
             width=300,
-            fg_color="#21416B"
+            fg_color="#825c46"
         )
 
         # Sidebar inicialmente fuera del canvas (oculta a la izquierda)
-        self.sidebar.place(
-            x=-300,
-            y=120,
-            relheight=1
-        )
+        self.sidebar.place(x=-300, y=120)
 
         # Truco para que NO afecte el grid del resto de widgets
         self.sidebar.lift()
@@ -44,6 +40,7 @@ class ClientesUI(ctk.CTkFrame):
 
         menu_items = [
             "Inicio",
+            "Productos",
             "Empleado",
             "Ventas",
             "Clientes",
@@ -58,12 +55,13 @@ class ClientesUI(ctk.CTkFrame):
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
-                hover_color="#142944",
+                hover_color="#644736",
                 text_color="white",
                 font=self.fuente_menu,
                 corner_radius=0,
                 height=45,
-                anchor="w"
+                anchor="w",
+                command=lambda n=item: self.master.mostrar_pantalla(n)
             )
             b.pack(fill="x", pady=2, padx=8)
 
@@ -73,8 +71,8 @@ class ClientesUI(ctk.CTkFrame):
             text="≡",
             width=50,
             height=40,
-            fg_color="#21416B",
-            hover_color="#1A1A40",
+            fg_color="#825c46",
+            hover_color="#644736",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=self.toggle_sidebar
@@ -99,10 +97,10 @@ class ClientesUI(ctk.CTkFrame):
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1a1a1a",
+            background="#2c2517",
             foreground="white",
             rowheight=30,
-            fieldbackground="#1a1a1a"
+            fieldbackground="#312b21"
         )
         style.configure(
             "Treeview.Heading",
@@ -145,9 +143,9 @@ class ClientesUI(ctk.CTkFrame):
                 self.tabla_frame,
                 command=self.tree.yview,
                 width=14,
-                fg_color="#1a1a1a",
-                button_color="#21416B",
-                button_hover_color="#142944"
+                fg_color="#644736",
+                button_color="#825c46",
+                button_hover_color="#4E382B"
             )
             # ---- SCROLLBAR (fila 1, otra columna) ----
             scrollbar.grid(row=1, column=1, sticky="ns")
@@ -174,8 +172,8 @@ class ClientesUI(ctk.CTkFrame):
         btn_style = {
             "width": 140,
             "height": 40,
-            "fg_color": "#21416B",
-            "hover_color": "#142944",
+            "fg_color": "#825c46",
+            "hover_color": "#644736",
             "text_color": "white",
             "corner_radius": 10,
             "font": self.fuente_normal
@@ -244,6 +242,19 @@ class ClientesUI(ctk.CTkFrame):
 
         # cargar inicialmente
         self.mostrar_clientes()
+        self.after(200, self.ajustar_sidebar)
+    
+    # Ajuste automático del sidebar
+    def ajustar_sidebar(self):
+        altura_real = self.winfo_height() - 120
+
+        if altura_real < 100:
+            self.after(100, self.ajustar_sidebar)
+            return
+
+        self.sidebar.configure(height=altura_real)
+
+
 
     # -------------------------
     # helpers / util
@@ -261,7 +272,7 @@ class ClientesUI(ctk.CTkFrame):
         win.resizable(False, False)
         win.grab_set()
         ctk.CTkLabel(win, text=mensaje, font=self.fuente_popup).pack(pady=16)
-        ctk.CTkButton(win, text="Cerrar", fg_color="#21416B", hover_color="#142944", command=win.destroy, font=self.fuente_normal).pack(pady=10)
+        ctk.CTkButton(win, text="Cerrar", fg_color="#825c46", hover_color="#644736", command=win.destroy, font=self.fuente_normal).pack(pady=10)
 
     # -------------------------
     # VALIDACIONES
@@ -367,7 +378,7 @@ class ClientesUI(ctk.CTkFrame):
 
         ctk.CTkLabel(win, text=f"¿Estás seguro de actualizar ID: {self.id_seleccionado}\nNombre: {nombre}?", font=self.fuente_popup).pack(pady=16)
 
-        ctk.CTkButton(win, text="Confirmar", fg_color="#21416B", hover_color="#142944",
+        ctk.CTkButton(win, text="Confirmar", fg_color="#825c46", hover_color="#644736",
                       command=lambda: [self._do_update_and_close(win)], font=self.fuente_normal).pack(pady=6)
         ctk.CTkButton(win, text="Cancelar", fg_color="#333", hover_color="#222", command=win.destroy, font=self.fuente_normal).pack(pady=4)
 

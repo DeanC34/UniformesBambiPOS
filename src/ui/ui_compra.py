@@ -60,7 +60,7 @@ class ComprasUI(ctk.CTkFrame):
         self.sidebar.grid_remove()
 
         menu_items = [
-            "Inicio", "Empleado", "Ventas",
+            "Inicio", "Productos", "Empleado", "Ventas",
             "Clientes", "Proveedores", "Compras",
             "Opciones", "Acerca de"
         ]
@@ -70,12 +70,13 @@ class ComprasUI(ctk.CTkFrame):
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
-                hover_color="#142944",
+                hover_color="#644736",
                 text_color="white",
                 font=self.fuente_menu,
                 corner_radius=0,
                 height=45,
-                anchor="w"
+                anchor="w",
+                command=lambda n=item: self.master.mostrar_pantalla(n)
             )
             b.pack(fill="x", pady=2, padx=8)
 
@@ -84,8 +85,8 @@ class ComprasUI(ctk.CTkFrame):
             text="≡",
             width=50,
             height=40,
-            fg_color="#21416B",
-            hover_color="#1A1A40",
+            fg_color="#825c46",
+            hover_color="#644736",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=self.toggle_sidebar
@@ -115,10 +116,10 @@ class ComprasUI(ctk.CTkFrame):
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1a1a1a",
+            background="#2c2517",
             foreground="white",
             rowheight=20,
-            fieldbackground="#1a1a1a"
+            fieldbackground="#312b21"
         )
         style.configure(
             "Treeview.Heading",
@@ -157,9 +158,9 @@ class ComprasUI(ctk.CTkFrame):
                 self.frame_tabla_compras,
                 command=self.tree_compras.yview,
                 width=14,
-                fg_color="#1a1a1a",
-                button_color="#21416B",
-                button_hover_color="#142944"
+                fg_color="#644736",
+                button_color="#825c46",
+                button_hover_color="#4E382B"
             )
             scrollbar.grid(row=0, column=1, sticky="ns")
             self.tree_compras.configure(yscrollcommand=scrollbar.set)
@@ -188,8 +189,8 @@ class ComprasUI(ctk.CTkFrame):
         style = {
             "width": 140,
             "height": 40,
-            "fg_color": "#21416B",
-            "hover_color": "#142944",
+            "fg_color": "#825c46",
+            "hover_color": "#644736",
             "text_color": "white",
             "corner_radius": 10,
             "font": self.fuente_normal
@@ -271,9 +272,9 @@ class ComprasUI(ctk.CTkFrame):
                 self.frame_detalles,
                 command=self.tree_detalle.yview,
                 width=14,
-                fg_color="#1a1a1a",
-                button_color="#21416B",
-                button_hover_color="#142944"
+                fg_color="#644736",
+                button_color="#825c46",
+                button_hover_color="#4E382B"
             )
             scrollbar.grid(row=0, column=1, sticky="ns")
             self.tree_detalle.configure(yscrollcommand=scrollbar.set)
@@ -311,7 +312,7 @@ class ComprasUI(ctk.CTkFrame):
         self.det_compra = ctk.CTkEntry(form, placeholder_text="ID Compra (auto)")
         self.det_compra.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
 
-        ctk.CTkButton(form, text="Agregar Detalle", fg_color="#21416B",
+        ctk.CTkButton(form, text="Agregar Detalle", fg_color="#825c46",
                       command=self.ui_agregar_detalle)\
             .grid(row=5, column=0, pady=10, sticky="ew")
 

@@ -7,6 +7,7 @@ from ui.ui_clientes import ClientesUI
 from ui.ui_proveedor import ProveedoresUI
 from ui.ui_compra import ComprasUI
 from ui.ui_venta import VentasUI
+from ui.ui_inicio import InicioUI
 
 # ================ CONFIGURACIÓN DE RUTAS ===================
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +38,8 @@ class App(ctk.CTk):
 
         # Tabla de pantallas disponibles
         self.pantallas = {
-            "Inicio": ProductosUI,
+            "Inicio": InicioUI,
+            "Productos": ProductosUI,
             "Empleado": EmpleadosUI,
             "Clientes": ClientesUI,
             "Proveedores": ProveedoresUI,

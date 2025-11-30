@@ -35,6 +35,7 @@ class ProductosUI(ctk.CTkFrame):
 
         menu_items = [
             "Inicio",
+            "Productos",
             "Empleado",
             "Ventas",
             "Clientes",
@@ -361,8 +362,8 @@ class ProductosUI(ctk.CTkFrame):
 
         ctk.CTkLabel(win, text=mensaje, font=self.fuente_popup).pack(pady=20)
 
-        ctk.CTkButton(win, text="Cerrar", fg_color="#21416B",
-                      hover_color="#14273F", command=win.destroy).pack(pady=10)
+        ctk.CTkButton(win, text="Cerrar", fg_color="#825c46",
+                      hover_color="#644736", command=win.destroy).pack(pady=10)
 
     # ============================================================
     #  SIDEBAR OVERLAY
