@@ -87,17 +87,17 @@ class ProveedoresUI(ctk.CTkFrame):
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
         # Ajuste layout general
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=0)
-        self.grid_rowconfigure(2, weight=5)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(0, weight=0) #altura boton_menu/titulo
+        self.grid_rowconfigure(1, weight=1) # altura tablas
+        self.grid_rowconfigure(2, weight=2) #altura campos
+        self.grid_rowconfigure(3, weight=4) #altura segunda tabla
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
 
         # ---------- TÍTULO PRINCIPAL ----------
         title = ctk.CTkLabel(self, text="Gestión de Proveedores", font=self.fuente_titulo)
-        title.grid(row=1, column=0, columnspan=2, pady=20, sticky="n")
+        title.grid(row=0, column=0, columnspan=2, pady=20, sticky="n")
 
         # ---------- ESTILO TABLA ----------
         style = ttk.Style()
@@ -119,7 +119,7 @@ class ProveedoresUI(ctk.CTkFrame):
 
         # ---- TABLA ----
         self.tabla_frame = ctk.CTkFrame(self)
-        self.tabla_frame.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+        self.tabla_frame.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
         self.tabla_frame.grid_rowconfigure(0, weight=1)
         self.tabla_frame.grid_columnconfigure(0, weight=1)
@@ -166,7 +166,7 @@ class ProveedoresUI(ctk.CTkFrame):
         #  ÁREA DE INTERACCIÓN
         # ============================================================
         btn_frame = ctk.CTkFrame(self)
-        btn_frame.grid(row=2, column=1, padx=10, pady=(40, 0), sticky="nsew")
+        btn_frame.grid(row=1, column=1, padx=10, pady=(10, 0), sticky="nsew")
         btn_frame.grid_rowconfigure((0,1,2,3), weight=1)
         btn_frame.grid_columnconfigure(0, weight=1)
 
@@ -184,37 +184,37 @@ class ProveedoresUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_proveedor, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_proveedores, **btn_style).grid(row=4, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_proveedor, **btn_style).grid(row=1, column=0, pady=15, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=2, column=0, pady=15, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=3, column=0, pady=15, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_proveedores, **btn_style).grid(row=4, column=0, pady=15, sticky="nsew")
 
         # ============================================================
         #  FORMULARIO
         # ============================================================
         form = ctk.CTkFrame(self)
-        form.grid(row=3, column=0, columnspan=2, pady=(20,10), padx=10, sticky="nsew")
+        form.grid(row=2, column=0, columnspan=2, pady=(20,20), padx=10, sticky="nsew")
 
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
 
         ctk.CTkLabel(form, text="Área de Campos", font=self.fuente_subtitulo).grid(
-            row=0, column=0, columnspan=2, pady=(10, 0)
+            row=0, column=0, columnspan=2, pady=(5, 0)
         )
 
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.nombre.grid(row=1, column=0, padx=15, pady=15, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.telefono.grid(row=1, column=1, padx=15, pady=15, sticky="ew")
 
         self.correo = ctk.CTkEntry(form, placeholder_text="Correo", font=self.fuente_normal)
-        self.correo.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self.correo.grid(row=2, column=0, padx=15, pady=15, sticky="ew")
 
         # TEXTBOX DIRECCIÓN
         try:
             self.direccion = ctk.CTkTextbox(form, height=80, font=self.fuente_normal)
-            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+            self.direccion.grid(row=2, column=1, padx=15, pady=20, sticky="ew")
 
             self.direccion_placeholder = "Dirección"
             self.direccion.insert("1.0", self.direccion_placeholder)
@@ -235,7 +235,7 @@ class ProveedoresUI(ctk.CTkFrame):
 
         except Exception:
             self.direccion = tk.Text(form, height=4)
-            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+            self.direccion.grid(row=2, column=1, padx=15, pady=5, sticky="ew")
 
         # Seleccion
         self.id_seleccionado = None

@@ -92,7 +92,7 @@ class ClientesUI(ctk.CTkFrame):
 
         # ---------- TÍTULO PRINCIPAL ----------
         title = ctk.CTkLabel(self, text="Gestión de Clientes", font=self.fuente_titulo)
-        title.grid(row=1, column=0, columnspan=2, pady=20, sticky="n")
+        title.grid(row=0, column=0, columnspan=2, pady=20, sticky="n")
 
         # ---------- ESTILO TABLA OSCURA ----------
         style = ttk.Style()
@@ -114,7 +114,7 @@ class ClientesUI(ctk.CTkFrame):
 
         # ---- CONTENEDOR PARA LA TABLA ----
         self.tabla_frame = ctk.CTkFrame(self)
-        self.tabla_frame.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+        self.tabla_frame.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
         # El frame de la tabla debe poder crecer
         self.tabla_frame.grid_rowconfigure(0, weight=1)
@@ -136,8 +136,8 @@ class ClientesUI(ctk.CTkFrame):
         self.tree.column("Correo", width=200)
         self.tree.column("Dirección", width=300)
 
-        # ---- TABLA (fila 0) ----
-        self.tree.grid(row=0, column=0, sticky="nsew", padx=0, pady=0)
+        # ---- TABLA (fila 1) ----
+        self.tree.grid(row=1, column=0, sticky="nsew", padx=0, pady=0)
 
         # Scrollbar estilizada usando CTkScrollbar
         try:
@@ -149,14 +149,14 @@ class ClientesUI(ctk.CTkFrame):
                 button_color="#21416B",
                 button_hover_color="#142944"
             )
-            # ---- SCROLLBAR (fila 0, otra columna) ----
-            scrollbar.grid(row=0, column=1, sticky="ns")
+            # ---- SCROLLBAR (fila 1, otra columna) ----
+            scrollbar.grid(row=1, column=1, sticky="ns")
             self.tree.configure(yscrollcommand=scrollbar.set)
         except Exception:
             # fallback a la scrollbar clásica de ttk si CTkScrollbar no está disponible
             scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
-            # ---- SCROLLBAR (fila 0, otra columna) ----
-            scrollbar.grid(row=0, column=1, sticky="ns")
+            # ---- SCROLLBAR (fila 1, otra columna) ----
+            scrollbar.grid(row=1, column=1, sticky="ns")
             self.tree.configure(yscrollcommand=scrollbar.set)
 
         # ============================================================
@@ -164,7 +164,7 @@ class ClientesUI(ctk.CTkFrame):
         # ============================================================
 
         btn_frame = ctk.CTkFrame(self)
-        btn_frame.grid(row=2, column=1, padx=10, pady=(40, 0), sticky="nsew")
+        btn_frame.grid(row=1, column=1, padx=10, pady=(15, 0), sticky="nsew")
         btn_frame.grid_rowconfigure((0,1,2,3), weight=1)
         btn_frame.grid_columnconfigure(0, weight=1)
 
@@ -191,7 +191,7 @@ class ClientesUI(ctk.CTkFrame):
         # ============================================================
 
         form = ctk.CTkFrame(self)
-        form.grid(row=3, column=0, columnspan=2, pady=(20,10), padx=10, sticky="nsew")
+        form.grid(row=2, column=0, columnspan=2, pady=(20,10), padx=10, sticky="nsew")
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
         
@@ -200,19 +200,19 @@ class ClientesUI(ctk.CTkFrame):
 
         # Campos del formulario (Entry cortos + Textarea para dirección)
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.nombre.grid(row=1, column=0, padx=5, pady=15, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.telefono.grid(row=1, column=1, padx=5, pady=15, sticky="ew")
 
         self.correo = ctk.CTkEntry(form, placeholder_text="Correo", font=self.fuente_normal)
-        self.correo.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self.correo.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
 
         # textbox para dirección (intentar usar CTkTextbox si existe)
         try:
             self.direccion = ctk.CTkTextbox(form, width=1, height=80)
             self.direccion.configure(font=self.fuente_normal)
-            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+            self.direccion.grid(row=2, column=1, padx=5, pady=15, sticky="ew")
 
             # --- Placeholder ---
             self.direccion_placeholder = "Dirección"
@@ -234,7 +234,7 @@ class ClientesUI(ctk.CTkFrame):
 
         except Exception:
             self.direccion = tk.Text(form, height=4, wrap="word", font=("Segoe UI", 12))
-            self.direccion.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+            self.direccion.grid(row=2, column=1, padx=5, pady=15, sticky="ew")
 
         # campo oculto id seleccionado
         self.id_seleccionado = None

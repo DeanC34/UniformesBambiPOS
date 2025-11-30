@@ -85,10 +85,10 @@ class VentasUI(ctk.CTkFrame):
     # LAYOUT
     # ======================================================================
     def _configurar_layout(self):
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=2)
-        self.grid_rowconfigure(3, weight=4)
+        self.grid_rowconfigure(0, weight=0) #altura boton_menu/titulo
+        self.grid_rowconfigure(1, weight=1) # altura tablas
+        self.grid_rowconfigure(2, weight=2) #altura campos
+        self.grid_rowconfigure(3, weight=4) #altura segunda tabla
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)

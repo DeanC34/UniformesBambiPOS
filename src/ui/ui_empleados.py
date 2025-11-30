@@ -82,17 +82,17 @@ class EmpleadosUI(ctk.CTkFrame):
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
         # Ajuste del layout principal
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=0)
-        self.grid_rowconfigure(2, weight=5)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(0, weight=0) # altura boton_menu/titulo
+        self.grid_rowconfigure(1, weight=1) # altura tablas
+        self.grid_rowconfigure(2, weight=2) # altura campos
+        self.grid_rowconfigure(3, weight=4) # altura segunda tabla
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
 
         # ---------- TÍTULO PRINCIPAL ----------
         title = ctk.CTkLabel(self, text="Gestión de Empleados", font=self.fuente_titulo)
-        title.grid(row=1, column=0, columnspan=2, pady=20, sticky="n")
+        title.grid(row=0, column=0, columnspan=2, pady=20, sticky="n")
 
         # ---------- ESTILO TABLA OSCURA ----------
         style = ttk.Style()
@@ -129,7 +129,7 @@ class EmpleadosUI(ctk.CTkFrame):
         self.tree.column("Rol", width=100, anchor="center")
         self.tree.column("Usuario", width=180)
 
-        self.tree.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+        self.tree.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
         scrollbar = ctk.CTkScrollbar( # scrollbar nueva
             self,
@@ -139,17 +139,17 @@ class EmpleadosUI(ctk.CTkFrame):
             button_color="#21416B",
             button_hover_color="#142944"
         )
-        scrollbar.grid(row=2, column=0, sticky="nse")
+        scrollbar.grid(row=1, column=0, sticky="nse")
         self.tree.configure(yscrollcommand=scrollbar.set)
 
         # ============================================================
         #  ÁREA DE INTERACCIÓN (botones)
         # ============================================================
         interaccion_title = ctk.CTkLabel(self, text="Área de Interacción", font=self.fuente_subtitulo)
-        interaccion_title.grid(row=2, column=1, sticky="n", pady=(10, 0))
+        interaccion_title.grid(row=1, column=1, sticky="n", pady=(5, 0))
 
         btn_frame = ctk.CTkFrame(self)
-        btn_frame.grid(row=2, column=1, padx=10, pady=(40, 0), sticky="nsew")
+        btn_frame.grid(row=1, column=1, padx=10, pady=(40, 0), sticky="nsew")
         btn_frame.grid_rowconfigure((0,1,2,3), weight=1)
         btn_frame.grid_columnconfigure(0, weight=1)
 
@@ -172,31 +172,31 @@ class EmpleadosUI(ctk.CTkFrame):
         #  ÁREA DE CAMPOS
         # ============================================================
         campos_title = ctk.CTkLabel(self, text="Área de Campos", font=self.fuente_subtitulo)
-        campos_title.grid(row=3, column=0, columnspan=2, sticky="n", pady=(10, 0))
+        campos_title.grid(row=2, column=0, columnspan=2, sticky="n", pady=(10, 0))
 
         form = ctk.CTkFrame(self)
-        form.grid(row=3, column=0, columnspan=2, pady=(40,10), padx=10, sticky="nsew")
+        form.grid(row=2, column=0, columnspan=2, pady=(40,10), padx=10, sticky="nsew")
         for i in range(2):
             form.grid_columnconfigure(i, weight=1)
 
         # Campos del formulario
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        self.nombre.grid(row=0, column=0, padx=5, pady=15, sticky="ew")
 
         self.puesto = ctk.CTkEntry(form, placeholder_text="Puesto", font=self.fuente_normal)
-        self.puesto.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+        self.puesto.grid(row=0, column=1, padx=5, pady=15, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.telefono.grid(row=1, column=0, padx=5, pady=15, sticky="ew")
 
         # OptionMenu Rol
         self.rol = ctk.CTkOptionMenu(form, values=["admin", "vendedor", "otro"], font=self.fuente_normal)
-        self.rol.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.rol.grid(row=1, column=1, padx=5, pady=15, sticky="ew")
 
         # OptionMenu Usuario (lista formateada "id - nombre (rol)")
         usuarios_list = self._cargar_usuarios_para_optionmenu()
         self.usuario_option = ctk.CTkOptionMenu(form, values=usuarios_list, font=self.fuente_normal)
-        self.usuario_option.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self.usuario_option.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
 
         # campo oculto id seleccionado
         self.id_seleccionado = None

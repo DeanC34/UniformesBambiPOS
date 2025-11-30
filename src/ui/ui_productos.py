@@ -22,7 +22,7 @@ class ProductosUI(ctk.CTkFrame):
         # ---------- SIDEBAR LATERAL DESPLEGABLE ----------
         self.sidebar_visible = False
 
-        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#21416B")
+        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#825c46")
         self.sidebar.place(x=-300, y=120, relheight=1)  # <-- empezamos oculto pero 60px abajo
         self.sidebar.lift()
         self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
@@ -45,7 +45,7 @@ class ProductosUI(ctk.CTkFrame):
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
-                hover_color="#142944",
+                hover_color="#644736",
                 text_color="white",
                 font=self.fuente_menu,
                 corner_radius=0,
@@ -60,8 +60,8 @@ class ProductosUI(ctk.CTkFrame):
             text="≡",
             width=50,
             height=40,
-            fg_color="#21416B",
-            hover_color="#1A1A40",
+            fg_color="#825c46",
+            hover_color="#644736",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=self.toggle_sidebar
@@ -69,10 +69,10 @@ class ProductosUI(ctk.CTkFrame):
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
         # Layout general
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=0)
-        self.grid_rowconfigure(2, weight=5)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(0, weight=0) # altura boton_menu/titulo
+        self.grid_rowconfigure(1, weight=1) # altura tablas
+        self.grid_rowconfigure(2, weight=2) # altura campos
+        self.grid_rowconfigure(3, weight=4) # altura segunda tabla (si es que tiene)
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
@@ -83,17 +83,17 @@ class ProductosUI(ctk.CTkFrame):
             text="Gestión de Productos",
             font=self.fuente_titulo
         )
-        title.grid(row=1, column=0, columnspan=2, pady=20, sticky="n")
+        title.grid(row=0, column=0, columnspan=2, pady=20, sticky="n")
 
         # ---------- ESTILO TABLA OSCURA ----------
         style = ttk.Style()
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1a1a1a",
+            background="#2c2517",
             foreground="white",
             rowheight=30,
-            fieldbackground="#1a1a1a",
+            fieldbackground="#312b21",
             bordercolor="#333",
             borderwidth=1
         )
@@ -114,10 +114,10 @@ class ProductosUI(ctk.CTkFrame):
         self.tree.heading("ID", text="ID")
         self.tree.heading("Nombre", text="Nombre")
         self.tree.heading("Precio", text="Precio")
-        self.tree.grid(row=2, column=0, sticky="nsew", padx=15, pady=10)
+        self.tree.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
-        scrollbar.grid(row=2, column=0, sticky="nse")
+        scrollbar.grid(row=1, column=0, sticky="nse")
         self.tree.configure(yscrollcommand=scrollbar.set)
 
         # ============================================================
@@ -128,18 +128,18 @@ class ProductosUI(ctk.CTkFrame):
             text="Interacción básica",
             font=self.fuente_subtitulo
         )
-        self.interaccion_title.grid(row=2, column=1, sticky="n", pady=(10, 0))
+        self.interaccion_title.grid(row=1, column=1, sticky="n", pady=(10, 0))
 
         btn_frame = ctk.CTkFrame(self)
-        btn_frame.grid(row=2, column=1, padx=10, pady=(40, 0), sticky="nsew")
+        btn_frame.grid(row=1, column=1, padx=10, pady=(40, 0), sticky="nsew")
         btn_frame.grid_rowconfigure((0,1,2,3), weight=1)
         btn_frame.grid_columnconfigure(0, weight=1)
 
         btn_style = {
             "width": 120,
             "height": 40,
-            "fg_color": "#21416B",
-            "hover_color": "#14273F",
+            "fg_color": "#825c46",
+            "hover_color": "#644736",
             "text_color": "white",
             "corner_radius": 10,
             "font": self.fuente_normal
@@ -158,28 +158,28 @@ class ProductosUI(ctk.CTkFrame):
             text="Área de Campos",
             font=self.fuente_subtitulo
         )
-        self.campos_title.grid(row=3, column=0, columnspan=2, sticky="n", pady=(10, 0))
+        self.campos_title.grid(row=2, column=0, columnspan=2, sticky="n", pady=(10, 0))
 
         self.form = ctk.CTkFrame(self)
-        self.form.grid(row=3, column=0, columnspan=2, pady=(40,10), padx=10, sticky="nsew")
+        self.form.grid(row=2, column=0, columnspan=2, pady=(40,10), padx=10, sticky="nsew")
 
         for i in range(2):
-            self.form.grid_columnconfigure(i, weight=1)
+            self.form.grid_columnconfigure(i, weight=2)
 
         self.nombre = ctk.CTkEntry(self.form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        self.nombre.grid(row=0, column=0, padx=5, pady=15, sticky="ew")
 
         self.descripcion = ctk.CTkEntry(self.form, placeholder_text="Descripción", font=self.fuente_normal)
-        self.descripcion.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+        self.descripcion.grid(row=0, column=1, padx=5, pady=15, sticky="ew")
 
         self.categoria = ctk.CTkOptionMenu(self.form, values=["escolar", "deportiva", "otra"], font=self.fuente_normal)
-        self.categoria.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.categoria.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
 
         self.precio = ctk.CTkEntry(self.form, placeholder_text="Precio", font=self.fuente_normal)
-        self.precio.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.precio.grid(row=2, column=1, padx=5, pady=15, sticky="ew")
 
         self.estado = ctk.CTkOptionMenu(self.form, values=["activo", "inactivo"], font=self.fuente_normal)
-        self.estado.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        self.estado.grid(row=3, column=0, padx=5, pady=15, sticky="ew")
 
         self.mostrar_productos()
 

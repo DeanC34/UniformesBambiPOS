@@ -96,10 +96,10 @@ class ComprasUI(ctk.CTkFrame):
     # ----------------------- LAYOUT PRINCIPAL ------------------------------
     # =======================================================================
     def _configurar_layout(self):
-        self.grid_rowconfigure(0, weight=0)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=2)
-        self.grid_rowconfigure(3, weight=4)
+        self.grid_rowconfigure(0, weight=0) #altura boton_menu/titulo
+        self.grid_rowconfigure(1, weight=1) # altura tablas
+        self.grid_rowconfigure(2, weight=2) #altura campos
+        self.grid_rowconfigure(3, weight=4) #altura segunda tabla
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
@@ -215,7 +215,7 @@ class ComprasUI(ctk.CTkFrame):
         self.fecha = ctk.CTkEntry(
             form,
             placeholder_text="Fecha (YYYY-MM-DD)",
-            validate="key",
+            #validate="key",
             validatecommand=self.vcmd_fecha
         )
 
@@ -384,12 +384,12 @@ class ComprasUI(ctk.CTkFrame):
 
     def validar_fecha_tecla(self, texto):
         # Permite borrar todo
-        if texto == "/":
+        if texto == "-":
             return True
 
         # Permite solo números y guiones
         for c in texto:
-            if not (c.isdigit() or c == "/"):
+            if not (c.isdigit() or c == "-"):
                 return False
 
         # Máximo 10 caracteres
@@ -398,19 +398,19 @@ class ComprasUI(ctk.CTkFrame):
 
         # Evita que escriban más de 4 dígitos al inicio
         if len(texto) >= 5:
-            if texto[4] != "/":
+            if texto[4] != "-":
                 return False
 
         # Evita que escriban más de 2 dígitos en el mes
         if len(texto) >= 8:
-            if texto[7] != "/":
+            if texto[7] != "-":
                 return False
 
         return True
 
     def validar_fecha_completa(self, fecha_texto):
         try:
-            datetime.datetime.strptime(fecha_texto, "%Y/%m/%d")
+            datetime.datetime.strptime(fecha_texto, "%Y-%m-%d")
             return True
         except ValueError:
             return False
