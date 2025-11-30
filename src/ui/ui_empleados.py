@@ -19,7 +19,7 @@ class EmpleadosUI(ctk.CTkFrame):
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
 
         # ---------- SIDEBAR LATERAL DESPLEGABLE ----------
         self.sidebar_visible = False
@@ -27,20 +27,16 @@ class EmpleadosUI(ctk.CTkFrame):
         self.sidebar = ctk.CTkFrame(
             self,
             width=300,
-            fg_color="#21416B"   # dark-blue
+            fg_color="#825c46"   # dark-blue
         )
 
-        # Sidebar inicialmente fuera del canvas (oculta a la izquierda)
-        self.sidebar.place(
-            x=-300,               # completamente fuera a la izquierda
-            y=120,                 # NO tapa el botón
-            relheight=1           # ocupa toda la altura restante
-        )
+        self.sidebar.place(x=-300, y=120)  # sin relheight
+        self.after(200, self.ajustar_sidebar)
 
         self.sidebar.lift()
-        self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
-        self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()
+        #self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
+        #self.sidebar.grid_propagate(False)
+        #self.sidebar.grid_remove()
 
         menu_items = [
             "Inicio",
@@ -58,12 +54,13 @@ class EmpleadosUI(ctk.CTkFrame):
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
-                hover_color="#142944",
+                hover_color="#644736",
                 text_color="white",
                 font=self.fuente_menu,
                 corner_radius=0,
                 height=45,
-                anchor="w"
+                anchor="w",
+                command=lambda n=item: self.master.mostrar_pantalla(n)
             )
             b.pack(fill="x", pady=2, padx=8)
 
@@ -73,8 +70,8 @@ class EmpleadosUI(ctk.CTkFrame):
             text="≡",
             width=50,
             height=40,
-            fg_color="#21416B",
-            hover_color="#1A1A40",
+            fg_color="#825c46",
+            hover_color="#644736",
             text_color="white",
             font=("Segoe UI", 20, "bold"),
             command=self.toggle_sidebar
@@ -83,9 +80,9 @@ class EmpleadosUI(ctk.CTkFrame):
 
         # Ajuste del layout principal
         self.grid_rowconfigure(0, weight=0) # altura boton_menu/titulo
-        self.grid_rowconfigure(1, weight=1) # altura tablas
-        self.grid_rowconfigure(2, weight=2) # altura campos
-        self.grid_rowconfigure(3, weight=4) # altura segunda tabla
+        self.grid_rowconfigure(1, weight=2) # altura tablas
+        self.grid_rowconfigure(2, weight=1) # altura campos
+        self.grid_rowconfigure(3, weight=0) # altura segunda tabla
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
@@ -99,10 +96,12 @@ class EmpleadosUI(ctk.CTkFrame):
         style.theme_use("default")
         style.configure(
             "Treeview",
-            background="#1a1a1a",
+            background="#2c2517",
             foreground="white",
             rowheight=30,
-            fieldbackground="#1a1a1a"
+            fieldbackground="#312b21",
+            bordercolor="#333",
+            borderwidth=1
         )
         style.configure(
             "Treeview.Heading",
@@ -131,14 +130,7 @@ class EmpleadosUI(ctk.CTkFrame):
 
         self.tree.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
-        scrollbar = ctk.CTkScrollbar( # scrollbar nueva
-            self,
-            command=self.tree.yview,
-            width=14,
-            fg_color="#1a1a1a",
-            button_color="#21416B",
-            button_hover_color="#142944"
-        )
+        scrollbar = ctk.CTkScrollbar(self, orientation="vertical")
         scrollbar.grid(row=1, column=0, sticky="nse")
         self.tree.configure(yscrollcommand=scrollbar.set)
 
@@ -154,10 +146,10 @@ class EmpleadosUI(ctk.CTkFrame):
         btn_frame.grid_columnconfigure(0, weight=1)
 
         btn_style = {
-            "width": 140,
+            "width": 120,
             "height": 40,
-            "fg_color": "#21416B",
-            "hover_color": "#142944",
+            "fg_color": "#825c46",
+            "hover_color": "#644736",
             "text_color": "white",
             "corner_radius": 10,
             "font": self.fuente_normal
@@ -207,6 +199,17 @@ class EmpleadosUI(ctk.CTkFrame):
         # cargar inicialmente
         self.mostrar_empleados()
 
+        self.after(200, self.ajustar_sidebar)
+
+    def ajustar_sidebar(self):
+        altura_real = self.winfo_height() - 120
+
+        if altura_real < 100:
+            self.after(100, self.ajustar_sidebar)
+            return  
+        self.sidebar.configure(height=altura_real)
+
+
     # -------------------------
     # helpers / util
     # -------------------------
@@ -226,15 +229,22 @@ class EmpleadosUI(ctk.CTkFrame):
         if not valores:
             valores = ["0 - (sin usuarios)"]
         return valores
-
+    
     def popup(self, titulo, mensaje):
         win = ctk.CTkToplevel(self)
         win.title(titulo)
-        win.geometry("360x160")
+        win.geometry("350x170")
         win.resizable(False, False)
-        win.grab_set()
-        ctk.CTkLabel(win, text=mensaje, font=self.fuente_popup).pack(pady=16)
-        ctk.CTkButton(win, text="Cerrar", fg_color="#21416B", hover_color="#142944", command=win.destroy, font=self.fuente_normal).pack(pady=10)
+
+        ctk.CTkLabel(win, text=mensaje, font=self.fuente_popup).pack(pady=20)
+
+        ctk.CTkButton(
+            win,
+            text="Cerrar",
+            fg_color="#21416B",
+            hover_color="#14273F",
+            command=win.destroy
+        ).pack(pady=10)
 
     # -------------------------
     # VALIDACIONES
@@ -460,15 +470,14 @@ class EmpleadosUI(ctk.CTkFrame):
     # ============================================================
     def toggle_sidebar(self):
         if self.sidebar_visible:
-            # Ocultar (slide hacia la izquierda)
-            for x in range(0, 301, 20):
+            for x in range(0, 301, 5):
                 self.sidebar.place(x=0 - x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = False
         else:
-            # Mostrar (slide hacia la derecha)
             self.sidebar.lift()
-            for x in range(-300, 1, 20):
+            for x in range(-300, 1, 5):
                 self.sidebar.place(x=x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = True
+

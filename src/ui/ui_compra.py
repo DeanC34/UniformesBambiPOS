@@ -23,7 +23,8 @@ class ComprasUI(ctk.CTkFrame):
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
+
 
         # ---------- SIDEBAR ----------
         self._crear_sidebar()

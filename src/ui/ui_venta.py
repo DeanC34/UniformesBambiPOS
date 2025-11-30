@@ -20,7 +20,7 @@ class VentasUI(ctk.CTkFrame):
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
 
         self._crear_sidebar()
         self._configurar_layout()
@@ -44,9 +44,9 @@ class VentasUI(ctk.CTkFrame):
 
         self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#21416B")
         self.sidebar.place(x=-300, y=120, relheight=1)
-        self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
-        self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()
+        #self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
+        #self.sidebar.grid_propagate(False)
+        #self.sidebar.grid_remove()
 
         menu_items = [
             "Inicio", "Empleado", "Ventas",

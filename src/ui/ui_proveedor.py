@@ -26,7 +26,7 @@ class ProveedoresUI(ctk.CTkFrame):
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
 
         # ---------- SIDEBAR LATERAL DESPLEGABLE ----------
         self.sidebar_visible = False
@@ -44,9 +44,9 @@ class ProveedoresUI(ctk.CTkFrame):
         )
 
         self.sidebar.lift()
-        self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
-        self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()
+        #self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
+        #self.sidebar.grid_propagate(False)
+        #self.sidebar.grid_remove()
 
         menu_items = [
             "Inicio",

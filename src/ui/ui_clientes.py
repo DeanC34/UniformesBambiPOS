@@ -18,7 +18,7 @@ class ClientesUI(ctk.CTkFrame):
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
 
         # ---------- SIDEBAR LATERAL DESPLEGABLE ----------
         self.sidebar_visible = False
@@ -38,9 +38,9 @@ class ClientesUI(ctk.CTkFrame):
 
         # Truco para que NO afecte el grid del resto de widgets
         self.sidebar.lift()
-        self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
-        self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()  # Sin esto, tapa todo
+        #self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
+        #self.sidebar.grid_propagate(False)
+        #self.sidebar.grid_remove()  # Sin esto, tapa todo
 
         menu_items = [
             "Inicio",

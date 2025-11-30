@@ -17,17 +17,21 @@ class ProductosUI(ctk.CTkFrame):
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
         self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
 
-        self.pack(fill="both", expand=True)
+        self.grid(row=0, column=0, sticky="nsew")
 
         # ---------- SIDEBAR LATERAL DESPLEGABLE ----------
         self.sidebar_visible = False
 
-        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#825c46")
-        self.sidebar.place(x=-300, y=120, relheight=1)  # <-- empezamos oculto pero 60px abajo
+        self.sidebar = ctk.CTkFrame(self, width=300, height=400, fg_color="#825c46")
+
+        # Sidebar oculto usando place (para animación)
+        self.sidebar.place(x=-300, y=120)
         self.sidebar.lift()
-        self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
-        self.sidebar.grid_propagate(False)
-        self.sidebar.grid_remove()
+
+        # ❌ Se eliminan estas líneas porque mezclan GRID con PLACE
+        # self.sidebar.grid(row=0, column=0, rowspan=10, sticky="nsw")
+        # self.sidebar.grid_propagate(False)
+        # self.sidebar.grid_remove()
 
         menu_items = [
             "Inicio",
@@ -50,9 +54,11 @@ class ProductosUI(ctk.CTkFrame):
                 font=self.fuente_menu,
                 corner_radius=0,
                 height=45,
-                anchor="w"
+                anchor="w",
+                command=lambda n=item: self.master.mostrar_pantalla(n)
             )
             btn.pack(fill="x", pady=2)
+
 
         # Botón para desplegar/cerrar menú
         self.menu_toggle = ctk.CTkButton(
@@ -70,9 +76,9 @@ class ProductosUI(ctk.CTkFrame):
 
         # Layout general
         self.grid_rowconfigure(0, weight=0) # altura boton_menu/titulo
-        self.grid_rowconfigure(1, weight=1) # altura tablas
-        self.grid_rowconfigure(2, weight=2) # altura campos
-        self.grid_rowconfigure(3, weight=4) # altura segunda tabla (si es que tiene)
+        self.grid_rowconfigure(1, weight=2) # altura tablas
+        self.grid_rowconfigure(2, weight=1) # altura campos
+        self.grid_rowconfigure(3, weight=0) # altura segunda tabla (si es que tiene)
 
         self.grid_columnconfigure(0, weight=4)
         self.grid_columnconfigure(1, weight=1)
@@ -116,7 +122,7 @@ class ProductosUI(ctk.CTkFrame):
         self.tree.heading("Precio", text="Precio")
         self.tree.grid(row=1, column=0, sticky="nsew", padx=15, pady=10)
 
-        scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
+        scrollbar = ctk.CTkScrollbar(self, orientation="vertical")
         scrollbar.grid(row=1, column=0, sticky="nse")
         self.tree.configure(yscrollcommand=scrollbar.set)
 
@@ -182,6 +188,17 @@ class ProductosUI(ctk.CTkFrame):
         self.estado.grid(row=3, column=0, padx=5, pady=15, sticky="ew")
 
         self.mostrar_productos()
+
+        self.after(200, self.ajustar_sidebar)
+
+    def ajustar_sidebar(self):
+        altura_real = self.winfo_height() - 120
+
+        if altura_real < 100:  # Previene errores al arrancar
+            self.after(100, self.ajustar_sidebar)
+            return
+
+        self.sidebar.configure(height=altura_real)
 
     # ============================================================
     #  MÉTODOS CRUD REALES
@@ -353,15 +370,14 @@ class ProductosUI(ctk.CTkFrame):
     def toggle_sidebar(self):
         if self.sidebar_visible:
             # Ocultar (slide hacia la izquierda)
-            for x in range(0, 301, 20):
+            for x in range(0, 301, 5):
                 self.sidebar.place(x=0 - x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = False
         else:
             # Mostrar (slide hacia la derecha)
             self.sidebar.lift()
-            for x in range(-300, 1, 20):
+            for x in range(-300, 1, 5):
                 self.sidebar.place(x=x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = True
-
