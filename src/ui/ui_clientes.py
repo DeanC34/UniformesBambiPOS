@@ -458,14 +458,14 @@ class ClientesUI(ctk.CTkFrame):
     def toggle_sidebar(self):
         if self.sidebar_visible:
             # Ocultar (slide hacia la izquierda)
-            for x in range(0, 301, 20):
+            for x in range(0, 301, 5):
                 self.sidebar.place(x=0 - x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = False
         else:
             # Mostrar (slide hacia la derecha)
             self.sidebar.lift()
-            for x in range(-300, 1, 20):
+            for x in range(-300, 1, 5):
                 self.sidebar.place(x=x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = True

@@ -6,9 +6,10 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 
-
 from crud.crud_compra import *
 from crud.crud_compradetalle import *
+
+import datetime
 
 class ComprasUI(ctk.CTkFrame):
 
@@ -18,10 +19,10 @@ class ComprasUI(ctk.CTkFrame):
         self.register_validadores()
 
         # ---------- FUENTES ----------
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 18, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 26, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 22, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -53,7 +54,7 @@ class ComprasUI(ctk.CTkFrame):
     def _crear_sidebar(self):
         self.sidebar_visible = False
 
-        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#21416B")
+        self.sidebar = ctk.CTkFrame(self, width=300, fg_color="#825c46")
         self.sidebar.place(x=-300, y=120, relheight=1)
         self.sidebar.grid(row=0, column=0, rowspan=50, sticky="nsw")
         self.sidebar.grid_propagate(False)
@@ -216,8 +217,8 @@ class ComprasUI(ctk.CTkFrame):
 
         self.fecha = ctk.CTkEntry(
             form,
-            placeholder_text="Fecha (YYYY-MM-DD)",
-            #validate="key",
+            placeholder_text="Fecha (DD/MM/YYYY)",
+            validate="key",
             validatecommand=self.vcmd_fecha
         )
 
@@ -385,34 +386,42 @@ class ComprasUI(ctk.CTkFrame):
 
 
     def validar_fecha_tecla(self, texto):
-        # Permite borrar todo
-        if texto == "-":
+        # Permite borrar
+        if texto == "":
             return True
 
-        # Permite solo números y guiones
+        # Solo números o "/"
         for c in texto:
-            if not (c.isdigit() or c == "-"):
+            if not (c.isdigit() or c == "/"):
                 return False
 
-        # Máximo 10 caracteres
+        # Largo máximo: 10 caracteres (DD/MM/YYYY)
         if len(texto) > 10:
             return False
 
-        # Evita que escriban más de 4 dígitos al inicio
-        if len(texto) >= 5:
-            if texto[4] != "-":
+        # Día completo → posiciones 0 y 1
+        if len(texto) >= 3:
+            if texto[2] != "/":
                 return False
 
-        # Evita que escriban más de 2 dígitos en el mes
-        if len(texto) >= 8:
-            if texto[7] != "-":
+        # Mes completo → posiciones 3 y 4 + slash
+        if len(texto) >= 6:
+            if texto[5] != "/":
                 return False
+
+        # No dejar más de 2 dígitos en día o mes
+        partes = texto.split("/")
+        if len(partes) >= 1 and len(partes[0]) > 2:
+            return False
+        if len(partes) >= 2 and len(partes[1]) > 2:
+            return False
 
         return True
 
+
     def validar_fecha_completa(self, fecha_texto):
         try:
-            datetime.datetime.strptime(fecha_texto, "%Y-%m-%d")
+            datetime.datetime.strptime(fecha_texto, "%d/%m/%Y")
             return True
         except ValueError:
             return False
@@ -423,7 +432,7 @@ class ComprasUI(ctk.CTkFrame):
     # ======================================================================
     def crear_compra(self):
         if not self.validar_fecha_completa(self.fecha.get()):
-            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con el formato YYYY-MM-DD.")
+            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con el formato YYYY/MM/DD.")
             return
 
         crear_compra(self.fecha.get(), self.total.get(), self.proveedor.get())
@@ -435,7 +444,7 @@ class ComprasUI(ctk.CTkFrame):
             return
 
         if not self.validar_fecha_completa(self.fecha.get()):
-            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con formato YYYY-MM-DD.")
+            messagebox.showerror("Fecha inválida", "Introduce una fecha válida con formato YYYY/MM/DD.")
             return
 
         id_compra = self.tree_compras.item(sel[0])["values"][0]
@@ -482,13 +491,13 @@ class ComprasUI(ctk.CTkFrame):
     # ======================================================================
     def toggle_sidebar(self):
         if self.sidebar_visible:
-            for x in range(0, 301, 20):
+            for x in range(0, 301, 5):
                 self.sidebar.place(x=-x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = False
         else:
             self.sidebar.lift()
-            for x in range(-300, 1, 20):
+            for x in range(-300, 1, 5):
                 self.sidebar.place(x=x, y=120)
                 self.sidebar.update()
             self.sidebar_visible = True

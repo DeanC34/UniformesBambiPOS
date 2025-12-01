@@ -48,7 +48,7 @@ class App(ctk.CTk):
         }
 
         # Pantalla inicial
-        self.current_frame = ProductosUI(self)
+        self.current_frame = InicioUI(self)
         self.current_frame.grid(row=0, column=0, sticky="nsew")
 
 

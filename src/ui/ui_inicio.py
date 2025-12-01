@@ -11,10 +11,10 @@ class InicioUI(ctk.CTkFrame):
         super().__init__(master)
 
         # Fuentes compartidas
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 32, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 20, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 42, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 25, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 15)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -72,13 +72,14 @@ class InicioUI(ctk.CTkFrame):
         self.menu_toggle.grid(row=0, column=0, sticky="nw", padx=10, pady=10)
 
         # Layout principal
-        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0)  # botón hamburguesa
+        self.grid_rowconfigure(1, weight=0)  # contenido
         self.grid_columnconfigure(0, weight=1)
 
         # ===================== CONTENIDO CENTRAL =========================
 
         contenedor = ctk.CTkFrame(self, fg_color="transparent")
-        contenedor.grid(row=0, column=0, sticky="nsew", padx=40, pady=40)
+        contenedor.grid(row=1, column=0, sticky="nsew", padx=40, pady=40)
         contenedor.grid_rowconfigure(0, weight=1)
         contenedor.grid_columnconfigure(0, weight=1)
 

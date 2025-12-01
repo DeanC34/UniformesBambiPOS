@@ -11,11 +11,11 @@ class ProductosUI(ctk.CTkFrame):
         super().__init__(master)
 
         # Fuente elegante global
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 18, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 26, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 22, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -286,7 +286,7 @@ class ProductosUI(ctk.CTkFrame):
 
         ctk.CTkLabel(win, text="¿Actualizar este producto?", font=self.fuente_popup).pack(pady=20)
 
-        ctk.CTkButton(win, text="Sí, actualizar", fg_color="#21416B",
+        ctk.CTkButton(win, text="Sí, actualizar", fg_color="#825c46",
                       hover_color="#14273F", command=lambda: [self.actualizar_producto(), win.destroy()]
                       ).pack(pady=5)
 
