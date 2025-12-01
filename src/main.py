@@ -18,7 +18,6 @@ ICON_PATH = os.path.join(CURRENT_DIR, "ui", "bambi_icono.ico")
 ctk.set_appearance_mode("light")
 ctk.set_default_color_theme(THEME_PATH)
 
-
 # ================ APLICACIÓN PRINCIPAL ======================
 class App(ctk.CTk):
     def __init__(self):
