@@ -152,10 +152,10 @@ class ProductosUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_producto, **btn_style).grid(row=0, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.eliminar_producto, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_productos, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_producto, **btn_style).grid(row=0, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=1, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.eliminar_producto, **btn_style).grid(row=2, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_productos, **btn_style).grid(row=3, column=0, padx = 10, pady=10, sticky="nsew")
 
         # ============================================================
         #  ÁREA DE CAMPOS
@@ -174,19 +174,19 @@ class ProductosUI(ctk.CTkFrame):
             self.form.grid_columnconfigure(i, weight=2)
 
         self.nombre = ctk.CTkEntry(self.form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=0, column=0, padx=5, pady=15, sticky="ew")
+        self.nombre.grid(row=0, column=0, padx=15, pady=15, sticky="ew")
 
         self.descripcion = ctk.CTkEntry(self.form, placeholder_text="Descripción", font=self.fuente_normal)
-        self.descripcion.grid(row=0, column=1, padx=5, pady=15, sticky="ew")
+        self.descripcion.grid(row=0, column=1, padx=15, pady=15, sticky="ew")
 
         self.categoria = ctk.CTkOptionMenu(self.form, values=["escolar", "deportiva", "otra"], font=self.fuente_normal)
-        self.categoria.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
+        self.categoria.grid(row=2, column=0, padx=15, pady=15, sticky="ew")
 
         self.precio = ctk.CTkEntry(self.form, placeholder_text="Precio", font=self.fuente_normal)
-        self.precio.grid(row=2, column=1, padx=5, pady=15, sticky="ew")
+        self.precio.grid(row=2, column=1, padx=15, pady=15, sticky="ew")
 
         self.estado = ctk.CTkOptionMenu(self.form, values=["activo", "inactivo"], font=self.fuente_normal)
-        self.estado.grid(row=3, column=0, padx=5, pady=15, sticky="ew")
+        self.estado.grid(row=3, column=0, padx=15, pady=15, sticky="ew")
 
         self.mostrar_productos()
 

@@ -12,11 +12,11 @@ class ClientesUI(ctk.CTkFrame):
         super().__init__(master)
 
         # Fuente elegante global
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 18, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 26, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 22, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -179,10 +179,10 @@ class ClientesUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_cliente, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_clientes, **btn_style).grid(row=4, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_cliente, **btn_style).grid(row=1, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=2, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=3, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_clientes, **btn_style).grid(row=4, column=0, padx = 10, pady=10, sticky="nsew")
 
         # ============================================================
         #  ÁREA DE CAMPOS
@@ -198,19 +198,19 @@ class ClientesUI(ctk.CTkFrame):
 
         # Campos del formulario (Entry cortos + Textarea para dirección)
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=1, column=0, padx=5, pady=15, sticky="ew")
+        self.nombre.grid(row=1, column=0, padx=15, pady=15, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=1, padx=5, pady=15, sticky="ew")
+        self.telefono.grid(row=1, column=1, padx=15, pady=15, sticky="ew")
 
         self.correo = ctk.CTkEntry(form, placeholder_text="Correo", font=self.fuente_normal)
-        self.correo.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
+        self.correo.grid(row=2, column=0, padx=15, pady=15, sticky="ew")
 
         # textbox para dirección (intentar usar CTkTextbox si existe)
         try:
             self.direccion = ctk.CTkTextbox(form, width=1, height=80)
             self.direccion.configure(font=self.fuente_normal)
-            self.direccion.grid(row=2, column=1, padx=5, pady=15, sticky="ew")
+            self.direccion.grid(row=2, column=1, padx=15, pady=15, sticky="ew")
 
             # --- Placeholder ---
             self.direccion_placeholder = "Dirección"

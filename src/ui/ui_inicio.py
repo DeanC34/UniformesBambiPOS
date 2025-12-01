@@ -80,16 +80,32 @@ class InicioUI(ctk.CTkFrame):
 
         contenedor = ctk.CTkFrame(self, fg_color="transparent")
         contenedor.grid(row=1, column=0, sticky="nsew", padx=40, pady=40)
-        contenedor.grid_rowconfigure(0, weight=1)
+        contenedor.grid_rowconfigure(3, weight=1)
         contenedor.grid_columnconfigure(0, weight=1)
 
-        # Hero: Titulo grande
+        frame_titulo = ctk.CTkFrame(contenedor, fg_color="transparent")
+        frame_titulo.grid(row=0, column=0, pady=(20, 5))
+
+        emoji = ctk.CTkLabel(
+            frame_titulo,
+            text="🧵",
+            font=("Segoe UI Emoji", 38)
+        )
+        emoji.pack(side="left", padx=20, pady=4)
+
         titulo = ctk.CTkLabel(
-            contenedor,
-            text="Bienvenido a Uniformes Bambi",
+            frame_titulo,
+            text="Bienvenido a 'Uniformes Bambi'",
             font=self.fuente_titulo
         )
-        titulo.grid(row=0, column=0, pady=(20, 5))
+        titulo.pack(side="left")
+
+        emoji2 = ctk.CTkLabel(
+            frame_titulo,
+            text="📒",
+            font=("Segoe UI Emoji", 38)
+        )
+        emoji2.pack(side="left", padx=20, pady=4)
 
         subt = ctk.CTkLabel(
             contenedor,
@@ -99,7 +115,7 @@ class InicioUI(ctk.CTkFrame):
         subt.grid(row=1, column=0, pady=(0, 30))
 
         # Panel decorativo central
-        panel = ctk.CTkFrame(contenedor, corner_radius=20, fg_color="#f0e8e2")
+        panel = ctk.CTkFrame(contenedor, corner_radius=20, fg_color="#fff6f0")
         panel.grid(row=2, column=0, padx=80, pady=20, sticky="nsew")
         panel.grid_rowconfigure(0, weight=1)
         panel.grid_columnconfigure(0, weight=1)
@@ -120,22 +136,22 @@ class InicioUI(ctk.CTkFrame):
         # ===================== TARJETAS DE FUNCIONES ==========================
 
         cards_frame = ctk.CTkFrame(contenedor, fg_color="transparent")
-        cards_frame.grid(row=3, column=0, pady=10)
+        cards_frame.grid(row=3, column=0, pady=20, sticky="nsew")
         cards_frame.grid_columnconfigure((0, 1, 2), weight=1)
 
         # Cada tarjeta es un CTkFrame con un pequeño relieve
         def crear_card(parent, titulo, descripcion):
-            card = ctk.CTkFrame(parent, corner_radius=15, fg_color="#fff", border_color="#c7b09a", border_width=2)
+            card = ctk.CTkFrame(parent, corner_radius=5, fg_color="#fff", border_color="#c7b09a", border_width=2)
             card.grid_propagate(False)
-            card.configure(width=280, height=150)
+            card.configure(width=360, height=200)
 
             ctk.CTkLabel(card, text=titulo, font=self.fuente_subtitulo).pack(pady=(10, 5))
-            ctk.CTkLabel(card, text=descripcion, font=self.fuente_normal, justify="center").pack(pady=(0, 10))
+            ctk.CTkLabel(card, text=descripcion, font=self.fuente_normal, justify="center", wraplength=300).pack(pady=(0, 10))
             return card
-
-        crear_card(cards_frame, "Gestión de Productos", "Consulta, agrega y controla el inventario.").grid(row=0, column=0, padx=10)
-        crear_card(cards_frame, "Empleados", "Administra personal, puestos y roles.").grid(row=0, column=1, padx=10)
-        crear_card(cards_frame, "Ventas / Compras", "Control total de transacciones del negocio.").grid(row=0, column=2, padx=10)
+        
+        crear_card(cards_frame, "Gestión de Productos", "Consulta, agrega y controla el inventario.").grid(row=0, column=0, padx=10, sticky="nsew")
+        crear_card(cards_frame, "Empleados", "Administra personal, puestos y roles.").grid(row=0, column=1, padx=10, sticky="nsew")
+        crear_card(cards_frame, "Ventas / Compras", "Control total de transacciones del negocio.").grid(row=0, column=2, padx=10,sticky="nsew")
 
     # ============================================
     # Ajuste automático del sidebar

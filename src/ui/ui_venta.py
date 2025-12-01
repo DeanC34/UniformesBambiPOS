@@ -20,10 +20,10 @@ class VentasUI(ctk.CTkFrame):
         super().__init__(master)
 
         # ---------- FUENTES ----------
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 18, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 26, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 22, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -173,7 +173,7 @@ class VentasUI(ctk.CTkFrame):
         btn_frame.grid_columnconfigure(0, weight=1)
         btn_frame.grid_rowconfigure((0,1,2,3,4), weight=1)
 
-        ctk.CTkLabel(btn_frame, text="Acciones", font=self.fuente_subtitulo).grid(row=0, column=0, pady=10)
+        ctk.CTkLabel(btn_frame, text="Acciones", font=self.fuente_subtitulo).grid(row=0, column=0, pady=8)
 
         style = {
             "width": 140,
@@ -280,7 +280,7 @@ class VentasUI(ctk.CTkFrame):
         ctk.CTkButton(
             form, text="Agregar Detalle", fg_color="#825c46",
             command=self.ui_agregar_detalle
-        ).grid(row=5, column=0, pady=10, sticky="ew")
+        ).grid(row=5, column=0, padx = 8, pady=10, sticky="ew")
 
     # ======================================================================
     # CARGA DE DATOS

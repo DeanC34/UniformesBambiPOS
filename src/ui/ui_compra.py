@@ -197,10 +197,10 @@ class ComprasUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_compra, **style).grid(row=1, column=0, pady=5)
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.actualizar_compra, **style).grid(row=2, column=0, pady=5)
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.eliminar_compra, **style).grid(row=3, column=0, pady=5)
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_compras, **style).grid(row=4, column=0, pady=5)
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_compra, **style).grid(row=1, column=0, padx = 2, pady=5)
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.actualizar_compra, **style).grid(row=2, column=0, padx = 2, pady=5)
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.eliminar_compra, **style).grid(row=3, column=0, padx = 2, pady=5)
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_compras, **style).grid(row=4, column=0, padx = 2, pady=5)
 
 
     # ======================================================================
@@ -213,7 +213,7 @@ class ComprasUI(ctk.CTkFrame):
         form.grid_columnconfigure((0,1,2), weight=1)
 
         ctk.CTkLabel(form, text="Datos de la Compra", font=self.fuente_subtitulo)\
-            .grid(row=0, column=0, columnspan=3, pady=10)
+            .grid(row=0, column=0, columnspan=3, pady=5)
 
         self.fecha = ctk.CTkEntry(
             form,
@@ -315,7 +315,7 @@ class ComprasUI(ctk.CTkFrame):
 
         ctk.CTkButton(form, text="Agregar Detalle", fg_color="#825c46",
                       command=self.ui_agregar_detalle)\
-            .grid(row=5, column=0, pady=10, sticky="ew")
+            .grid(row=5, column=0, padx = 8, pady=10, sticky="ew")
 
 
     # ======================================================================

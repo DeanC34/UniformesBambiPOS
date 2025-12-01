@@ -13,11 +13,11 @@ class EmpleadosUI(ctk.CTkFrame):
         super().__init__(master)
 
         # Fuente elegante global
-        self.fuente_titulo = ctk.CTkFont("Segoe UI", 26, "bold")
-        self.fuente_subtitulo = ctk.CTkFont("Segoe UI", 18, "bold")
+        self.fuente_titulo = ctk.CTkFont("Bell MT", 26, "bold")
+        self.fuente_subtitulo = ctk.CTkFont("Bell MT", 22, "bold")
         self.fuente_normal = ctk.CTkFont("Segoe UI", 14)
         self.fuente_popup = ctk.CTkFont("Segoe UI", 16)
-        self.fuente_menu = ctk.CTkFont("Segoe UI", 15, "bold")
+        self.fuente_menu = ctk.CTkFont("Sitka", 17, "bold")
 
         self.grid(row=0, column=0, sticky="nsew")
 
@@ -156,10 +156,10 @@ class EmpleadosUI(ctk.CTkFrame):
             "font": self.fuente_normal
         }
 
-        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_empleado, **btn_style).grid(row=0, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=1, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=2, column=0, pady=10, sticky="nsew")
-        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_empleados, **btn_style).grid(row=3, column=0, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Crear", command=self.crear_empleado, **btn_style).grid(row=0, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Actualizar", command=self.confirmar_actualizacion_popup, **btn_style).grid(row=1, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Eliminar", command=self.confirmar_eliminacion_popup, **btn_style).grid(row=2, column=0, padx = 10, pady=10, sticky="nsew")
+        ctk.CTkButton(btn_frame, text="Refrescar", command=self.mostrar_empleados, **btn_style).grid(row=3, column=0, padx = 10, pady=10, sticky="nsew")
 
         # ============================================================
         #  ÁREA DE CAMPOS
@@ -174,22 +174,22 @@ class EmpleadosUI(ctk.CTkFrame):
 
         # Campos del formulario
         self.nombre = ctk.CTkEntry(form, placeholder_text="Nombre", font=self.fuente_normal)
-        self.nombre.grid(row=0, column=0, padx=5, pady=15, sticky="ew")
+        self.nombre.grid(row=0, column=0, padx=15, pady=15, sticky="ew")
 
         self.puesto = ctk.CTkEntry(form, placeholder_text="Puesto", font=self.fuente_normal)
-        self.puesto.grid(row=0, column=1, padx=5, pady=15, sticky="ew")
+        self.puesto.grid(row=0, column=1, padx=15, pady=15, sticky="ew")
 
         self.telefono = ctk.CTkEntry(form, placeholder_text="Teléfono", font=self.fuente_normal)
-        self.telefono.grid(row=1, column=0, padx=5, pady=15, sticky="ew")
+        self.telefono.grid(row=1, column=0, padx=15, pady=15, sticky="ew")
 
         # OptionMenu Rol
         self.rol = ctk.CTkOptionMenu(form, values=["admin", "vendedor", "otro"], font=self.fuente_normal)
-        self.rol.grid(row=1, column=1, padx=5, pady=15, sticky="ew")
+        self.rol.grid(row=1, column=1, padx=15, pady=15, sticky="ew")
 
         # OptionMenu Usuario (lista formateada "id - nombre (rol)")
         usuarios_list = self._cargar_usuarios_para_optionmenu()
         self.usuario_option = ctk.CTkOptionMenu(form, values=usuarios_list, font=self.fuente_normal)
-        self.usuario_option.grid(row=2, column=0, padx=5, pady=15, sticky="ew")
+        self.usuario_option.grid(row=2, column=0, padx=15, pady=15, sticky="ew")
 
         # campo oculto id seleccionado
         self.id_seleccionado = None
