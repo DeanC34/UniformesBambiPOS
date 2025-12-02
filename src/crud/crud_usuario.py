@@ -12,7 +12,7 @@ def obtener_usuarios():
         try:
             cursor = conexion.cursor(dictionary=True)
             cursor.execute("""
-                SELECT id_usuario, nombre_usuario, rol_usuario
+                SELECT id_usuario, nombre_usuario, rol_usuario, contrasena_hash
                 FROM Usuario
                 ORDER BY nombre_usuario ASC
             """)
@@ -25,16 +25,16 @@ def obtener_usuarios():
     return usuarios
 
 
-def crear_usuario(nombre, contraseña_hash, rol):
+def crear_usuario(nombre, contrasena_hash, rol):
     conexion = conectar_bd()
     if conexion:
         try:
             cursor = conexion.cursor()
             sql = """
-                INSERT INTO Usuario(nombre_usuario, contraseña_hash, rol_usuario)
+                INSERT INTO Usuario(nombre_usuario, contrasena_hash, rol_usuario)
                 VALUES (%s, %s, %s)
             """
-            cursor.execute(sql, (nombre, contraseña_hash, rol))
+            cursor.execute(sql, (nombre, contrasena_hash, rol))
             conexion.commit()
             return True
         except Error as error:
@@ -52,7 +52,7 @@ def obtener_usuario_por_id(id_usuario):
         try:
             cursor = conexion.cursor(dictionary=True)
             cursor.execute("""
-                SELECT id_usuario, nombre_usuario, rol_usuario
+                SELECT id_usuario, nombre_usuario, rol_usuario, contrasena_hash
                 FROM Usuario
                 WHERE id_usuario=%s
             """, (id_usuario,))

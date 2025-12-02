@@ -8,6 +8,8 @@ from ui.ui_proveedor import ProveedoresUI
 from ui.ui_compra import ComprasUI
 from ui.ui_venta import VentasUI
 from ui.ui_inicio import InicioUI
+from ui.ui_login import LoginUI
+
 
 # ================ CONFIGURACIÓN DE RUTAS ===================
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +33,6 @@ class App(ctk.CTk):
         except:
             print("No se pudo cargar el icono.")
 
-        # 💡 ESTA ES LA PARTE QUE FALTABA 💡
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
@@ -47,7 +48,7 @@ class App(ctk.CTk):
         }
 
         # Pantalla inicial
-        self.current_frame = InicioUI(self)
+        self.current_frame = LoginUI(self)
         self.current_frame.grid(row=0, column=0, sticky="nsew")
 
 
@@ -64,6 +65,26 @@ class App(ctk.CTk):
         FrameClass = self.pantallas[nombre]
         self.current_frame = FrameClass(self)
         self.current_frame.grid(row=0, column=0, sticky="nsew")
+
+    def autenticar(self, usuario_data):
+        """
+        Método llamado desde LoginUI cuando el login es correcto.
+        usuario_data es un dict con nombre_usuario, rol, etc.
+        """
+
+        print("Usuario autenticado:", usuario_data["nombre_usuario"])
+
+        # Quitar pantalla de login
+        self.current_frame.grid_forget()
+        self.current_frame.destroy()
+
+        # Guardar el usuario actual por si lo ocupan otras interfaces
+        self.usuario_actual = usuario_data
+
+        # Mostrar pantalla de inicio
+        self.current_frame = InicioUI(self)
+        self.current_frame.grid(row=0, column=0, sticky="nsew")
+
 
 # ================ EJECUCIÓN ======================
 if __name__ == "__main__":

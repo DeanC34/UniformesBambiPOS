@@ -19,7 +19,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 INSERT INTO Usuario (nombre_usuario, contrasena_hash, rol_usuario)
 VALUES 
-('admin', '$2b$12$wNWUuMlGHNirMRHkRkNvgeNFVQVw1Gc7YCOUMIqFZ3VAb9/T/jHhG', 'admin');
+('admin', '$2b$12$wNWUuMlGHNirMRHkRkNvgeNFVQVw1Gc7YCOUMIqFZ3VAb9/T/jHhG', 'admin'),
+('Administrador_Oficial', 'DeanC34', 'admin')
+;
 
 -- Obtener ID del usuario admin recién creado
 SET @admin_id := LAST_INSERT_ID();

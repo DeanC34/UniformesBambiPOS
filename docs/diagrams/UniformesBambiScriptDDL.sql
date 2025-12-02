@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `UniformesBambi`.`Usuario` (
   `id_usuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre_usuario` VARCHAR(50) NULL,
   `contrasena_hash` VARCHAR(255) NULL,
-  `rol_usuario` ENUM('admin', 'vendedor', 'otro') NULL,
+  `rol_usuario` ENUM('admin', 'vendedor', 'Empleado', 'otro') NULL,
   PRIMARY KEY (`id_usuario`))
 ENGINE = InnoDB;
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `UniformesBambi`.`Empleado` (
   `nombre_empleado` VARCHAR(50) NULL,
   `puesto_empleado` VARCHAR(40) NULL,
   `telefono_empleado` VARCHAR(15) NULL,
-  `rol_empleado` ENUM('admin', 'vendedor', 'otro') NULL,
+  `rol_empleado` ENUM('admin', 'vendedor', 'Empleado', 'otro') NULL,
   `Usuario_id_usuario` INT UNSIGNED NULL,
   PRIMARY KEY (`id_empleado`),
   INDEX `fk_Empleado_Usuario1_idx` (`Usuario_id_usuario` ASC) VISIBLE,
