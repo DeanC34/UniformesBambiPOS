@@ -1,5 +1,7 @@
 import customtkinter as ctk
 import os
+import ctypes
+import sys
 # Importar todas las pantallas
 from ui.ui_productos import ProductosUI
 from ui.ui_empleados import EmpleadosUI
@@ -14,6 +16,12 @@ from ui.ui_login import LoginUI
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 THEME_PATH = os.path.join(CURRENT_DIR, "ui", "coffee.json")
 ICON_PATH = os.path.join(CURRENT_DIR, "ui", "bambi_icono.ico")
+
+# Icono en la barra de tareas
+if sys.platform == "win32":
+    app_id = "Bambi.Uniformes.App"  # id
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+
 
 # Aplica tema **ANTES** de crear la ventana principal
 ctk.set_appearance_mode("light")
