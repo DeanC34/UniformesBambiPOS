@@ -19,8 +19,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 INSERT INTO Usuario (nombre_usuario, contrasena_hash, rol_usuario)
 VALUES 
-('admin', '$2b$12$wNWUuMlGHNirMRHkRkNvgeNFVQVw1Gc7YCOUMIqFZ3VAb9/T/jHhG', 'admin'),
-('Administrador_Oficial', 'DeanC34', 'admin')
+('Admin', '$2b$12$wNWUuMlGHNirMRHkRkNvgeNFVQVw1Gc7YCOUMIqFZ3VAb9/T/jHhG', 'admin'),
+('Administrador_Oficial', '$2b$12$QpgDE8AVSVFl2bfFOhWnmu5HqSAaIX27Ko0c6If3kPf0i/xWGw8kK', 'admin')
 ;
 
 -- Obtener ID del usuario admin recién creado

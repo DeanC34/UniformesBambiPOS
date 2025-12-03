@@ -138,7 +138,7 @@ class LoginUI(ctk.CTkFrame):
         entry_pass.pack(pady=5)
 
         ctk.CTkLabel(ventana, text="Rol:").pack()
-        combo_rol = ctk.CTkComboBox(ventana, values=["empleado", "admin", "otro"])
+        combo_rol = ctk.CTkComboBox(ventana, values=["Empleado", "admin", "otro"])
         combo_rol.pack(pady=5)
 
         def crear():

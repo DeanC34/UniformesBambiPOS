@@ -10,7 +10,6 @@ from ui.ui_venta import VentasUI
 from ui.ui_inicio import InicioUI
 from ui.ui_login import LoginUI
 
-
 # ================ CONFIGURACIÓN DE RUTAS ===================
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 THEME_PATH = os.path.join(CURRENT_DIR, "ui", "coffee.json")
@@ -36,7 +35,6 @@ class App(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        # Tabla de pantallas disponibles
         self.pantallas = {
             "Inicio": InicioUI,
             "Productos": ProductosUI,

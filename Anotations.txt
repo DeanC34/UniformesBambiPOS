@@ -10,22 +10,12 @@ C:\UniformesBambiPOS>git remote add origin https://github.com/DeanC34/UniformesB
 C:\UniformesBambiPOS>git branch -m main
 
 Recordar iniciar sesion en el git con tu github
+
+pip install -r requirements.txt
  
 ----------- Importar base de datos desde el script ------- 
  
 Enter password: *******
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 15
-Server version: 8.0.44 MySQL Community Server - GPL
-
-Copyright (c) 2000, 2025, Oracle and/or its affiliates.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
 mysql> show databases
     -> ;
 +--------------------+
@@ -38,90 +28,8 @@ mysql> show databases
 +--------------------+
 4 rows in set (0.00 sec)
 
-mysql> CREATE DATABASE UniformesBambi
-    -> ;
-Query OK, 1 row affected (0.01 sec)
-
-mysql> USE UniformesBambi;
-Database changed
-mysql> \r \d>
-ERROR 1049 (42000): Unknown database 'd>'
-mysql> show tables;
-No connection. Trying to reconnect...
-ERROR 1049 (42000): Unknown database 'd>'
-ERROR:
-Can't connect to the server
-
-mysql> USE UniformesBambi;
-No connection. Trying to reconnect...
-Connection id:    18
-Current database: *** NONE ***
-
-Database changed
-mysql> show tables;
-Empty set (0.01 sec)
-
 mysql> SOURCE C:/UniformesBambiPOS/docs/diagrams/UniformesBambiScript.sql;
-Query OK, 0 rows affected (0.00 sec)
-
-Query OK, 0 rows affected (0.00 sec)
-
-Query OK, 0 rows affected (0.00 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 1 row affected, 1 warning (0.00 sec)
-
-Database changed
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.01 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.01 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.01 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.01 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected, 1 warning (0.00 sec)
-
-Query OK, 0 rows affected (0.02 sec)
-
-Query OK, 0 rows affected (0.00 sec)
-
-Query OK, 0 rows affected (0.00 sec)
-
-Query OK, 0 rows affected (0.00 sec)
+Query OK, 0 rows affected (0.00 sec) ...
 
 mysql> show tables;
 +-------------------+
@@ -260,3 +168,74 @@ pillow                 12.0.0
 pip                    25.2
 (entornovirtual) PS C:\UniformesBambiPOS> code .
 (entornovirtual) PS C:\UniformesBambiPOS>
+
+en VSCODE : ctrl + shift + p = cambiar interprete al del entornovirtual
+
+--------------------------------instalar actualizaciones en otro equipo:-----------------------------------------------
+C:\UniformesBambiPOS>git init
+Reinitialized existing Git repository in C:/UniformesBambiPOS/.git/
+
+C:\UniformesBambiPOS>git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/database/db_connector.py
+        modified:   src/main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+C:\UniformesBambiPOS>git fetch --all
+remote: Enumerating objects: 50, done.
+remote: Counting objects: 100% (50/50), done.
+remote: Compressing objects: 100% (9/9), done.
+remote: Total 32 (delta 20), reused 32 (delta 20), pack-reused 0 (from 0)
+Unpacking objects: 100% (32/32), 7.56 KiB | 47.00 KiB/s, done.
+From https://github.com/DeanC34/UniformesBambiPOS
+   d6095d2..7fb2428  main       -> origin/main
+
+C:\UniformesBambiPOS>git stash
+Saved working directory and index state WIP on main: d6095d2 Actualizacion ajuste de tamaños del grid
+
+C:\UniformesBambiPOS>git pull
+Updating d6095d2..7fb2428
+Fast-forward
+ docs/diagrams/UniformesBambiScriptDDL.sql |   4 +-
+ docs/diagrams/UniformesBambiScriptDML.sql |   4 +-
+ requirements.txt                          |   3 +-
+ src/crud/crud_usuario.py                  |  10 +-
+ src/main.py                               |  25 +++-
+ src/ui/ui_clientes.py                     |  20 ++-
+ src/ui/ui_compra.py                       |  18 ++-
+ src/ui/ui_empleados.py                    |  23 ++-
+ src/ui/ui_inicio.py                       |  22 ++-
+ src/ui/ui_login.py                        | 231 ++++++++++++++++++++++++++++++
+ src/ui/ui_productos.py                    |  25 +++-
+ src/ui/ui_proveedor.py                    |  23 ++-
+ src/ui/ui_venta.py                        |  18 ++-
+ src/utils/seguridad.py                    |  20 +++
+ src/utils/seguridad_usuarios.py           |  10 ++
+ 15 files changed, 424 insertions(+), 32 deletions(-)
+ create mode 100644 src/ui/ui_login.py
+ create mode 100644 src/utils/seguridad.py
+ create mode 100644 src/utils/seguridad_usuarios.py
+
+C:\UniformesBambiPOS>git stash pop
+Auto-merging src/main.py
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   src/database/db_connector.py
+        modified:   src/main.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (6c623e98173f30670cbcaa99d936cf643e99756d)
+
+C:\UniformesBambiPOS>git update-index --skip-worktree src/database/db_connector.py
+
+C:\UniformesBambiPOS>
