@@ -4,6 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from crud.crud_empleado import *
 from crud.crud_usuario import obtener_usuarios  # asumo que este método existe y devuelve lista de dicts
 
@@ -50,7 +51,21 @@ class EmpleadosUI(ctk.CTkFrame):
             "Acerca de"
         ]
 
+        PROHIBIDOS_EMPLEADO = ["Empleado", "Compras", "Proveedores"]
+        rol = self.master.usuario_actual.get("rol_usuario", "otro")
+        es_empleado = rol != "admin"
+
         for item in menu_items:
+            def accion(n=item):
+                if es_empleado and n in PROHIBIDOS_EMPLEADO:
+                    messagebox.showwarning(
+                        "Acceso restringido",
+                        f"No tienes permisos para acceder a {n}."
+                    )
+                    return
+
+                self.master.mostrar_pantalla(n)
+
             b = ctk.CTkButton(
                 self.sidebar,
                 text=item,
@@ -61,8 +76,8 @@ class EmpleadosUI(ctk.CTkFrame):
                 corner_radius=0,
                 height=45,
                 anchor="w",
-                command=lambda n=item: self.master.mostrar_pantalla(n)
-            )
+                command=accion  # ← ahora realmente llama a la lógica de permisos
+                )
             b.pack(fill="x", pady=2, padx=8)
 
         # Botón para abrir/cerrar
@@ -183,7 +198,7 @@ class EmpleadosUI(ctk.CTkFrame):
         self.telefono.grid(row=1, column=0, padx=15, pady=15, sticky="ew")
 
         # OptionMenu Rol
-        self.rol = ctk.CTkOptionMenu(form, values=["admin", "vendedor", "otro"], font=self.fuente_normal)
+        self.rol = ctk.CTkOptionMenu(form, values=["admin", "otro"], font=self.fuente_normal)
         self.rol.grid(row=1, column=1, padx=15, pady=15, sticky="ew")
 
         # OptionMenu Usuario (lista formateada "id - nombre (rol)")
@@ -306,7 +321,7 @@ class EmpleadosUI(ctk.CTkFrame):
         self.telefono.delete(0, "end")
         self.telefono.insert(0, empleado.get("telefono_empleado", "") or "")
 
-        rol_val = empleado.get("rol_empleado", "") or "vendedor"
+        rol_val = empleado.get("rol_empleado", "") or "otro"
         # ajustar rol option
         try:
             self.rol.set(rol_val)

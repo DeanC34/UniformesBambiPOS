@@ -4,6 +4,8 @@ from tkinter import messagebox
 
 from crud.crud_usuario import obtener_usuarios, crear_usuario
 from utils.seguridad import verificar_password, hash_password
+from utils.seguridad_usuarios import establecer_usuario
+
 
 class LoginUI(ctk.CTkFrame):
 
@@ -112,6 +114,9 @@ class LoginUI(ctk.CTkFrame):
             messagebox.showerror("Error", "Contraseña incorrecta.")
             return
 
+        # Guardar usuario logueado globalmente
+        establecer_usuario(usuario_data["id_usuario"], usuario_data["rol_usuario"])
+
         # Aquí activas el panel principal
         self.master.autenticar(usuario_data)
 
@@ -133,7 +138,7 @@ class LoginUI(ctk.CTkFrame):
         entry_pass.pack(pady=5)
 
         ctk.CTkLabel(ventana, text="Rol:").pack()
-        combo_rol = ctk.CTkComboBox(ventana, values=["empleado", "admin", "vendedor"])
+        combo_rol = ctk.CTkComboBox(ventana, values=["empleado", "admin", "otro"])
         combo_rol.pack(pady=5)
 
         def crear():

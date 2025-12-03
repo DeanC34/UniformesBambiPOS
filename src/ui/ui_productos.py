@@ -3,6 +3,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
+
 from crud.crud_producto import *
 
 class ProductosUI(ctk.CTkFrame):
@@ -45,8 +47,22 @@ class ProductosUI(ctk.CTkFrame):
             "Acerca de"
         ]
 
+        PROHIBIDOS_EMPLEADO = ["Empleado", "Compras", "Proveedores"]
+        rol = self.master.usuario_actual.get("rol_usuario", "otro")
+        es_empleado = rol != "admin"
+
         for item in menu_items:
-            btn = ctk.CTkButton(
+            def accion(n=item):
+                if es_empleado and n in PROHIBIDOS_EMPLEADO:
+                    messagebox.showwarning(
+                        "Acceso restringido",
+                        f"No tienes permisos para acceder a {n}."
+                    )
+                    return
+
+                self.master.mostrar_pantalla(n)
+
+            b = ctk.CTkButton(
                 self.sidebar,
                 text=item,
                 fg_color="transparent",
@@ -56,10 +72,9 @@ class ProductosUI(ctk.CTkFrame):
                 corner_radius=0,
                 height=45,
                 anchor="w",
-                command=lambda n=item: self.master.mostrar_pantalla(n)
-            )
-            btn.pack(fill="x", pady=2)
-
+                command=accion  # ← ahora realmente llama a la lógica de permisos
+                )
+            b.pack(fill="x", pady=2, padx=8)
 
         # Botón para desplegar/cerrar menú
         self.menu_toggle = ctk.CTkButton(
